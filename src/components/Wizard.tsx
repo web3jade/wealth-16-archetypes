@@ -16,6 +16,7 @@ import type {
   WizardInput,
 } from '../engine/types'
 import { marketDisclaimer, t, type Lang } from '../i18n/messages'
+import { cityLabel, marketLabel } from '../i18n/places'
 import { citiesForSelect, getMarket, isOtherCity, marketsGroupedByRegion } from '../markets'
 import { classifyPersonality } from '../personality/classify'
 import { buildAgentBrief, copyAgentBrief } from '../share/buildAgentBrief'
@@ -200,7 +201,7 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
                     <optgroup key={group.region} label={t(lang, `locale.region.${group.region}`)}>
                       {group.markets.map((m) => (
                         <option key={m.id} value={m.id}>
-                          {m.name}
+                          {marketLabel(lang, m.id, m.name)}
                         </option>
                       ))}
                     </optgroup>
@@ -216,7 +217,7 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
                 >
                   {citiesForSelect(market).map((c) => (
                     <option key={c.id} value={c.id}>
-                      {isOtherCity(c.id) ? t(lang, 'locale.city.other') : c.name}
+                      {cityLabel(lang, c.id, c.name)}
                     </option>
                   ))}
                 </select>
