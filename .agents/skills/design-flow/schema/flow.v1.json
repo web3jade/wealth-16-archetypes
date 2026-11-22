@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://design-flow.local/schema/flow.v1.json",
+  "title": "Design Flow spec (flow.yaml)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "title",
+    "screens"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "lanes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tone": {
+            "enum": [
+              "success",
+              "info",
+              "danger",
+              "neutral"
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "enter": {
+            "enum": [
+              "any"
+            ]
+          }
+        }
+      }
+    },
+    "screens": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lane": {
+            "$ref": "#/$defs/id"
+          },
+          "note": {
+            "type": "string"
+          },
+          "badges": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "home",
+                "video",
+                "timer"
+              ]
+            }
+          },
+          "html": {
+            "type": "string",
+            "description": "The screen's body HTML, styled however the agent likes"
+          },
+          "file": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*\\.\\.)[A-Za-z0-9_./-]+\\.html$",
+            "description": "Path to an HTML file relative to the feature directory"
+          },
+          "viewport": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "width",
+              "height"
+            ],
+            "properties": {
+              "width": {
+                "type": "integer",
+                "minimum": 120,
+                "maximum": 3840
+              },
+              "height": {
+                "type": "integer",
+                "minimum": 120,
+                "maximum": 3840
+              }
+            }
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from",
+          "to"
+        ],
+        "properties": {
+          "from": {
+            "$ref": "#/$defs/id"
+          },
+          "to": {
+            "$ref": "#/$defs/id"
+          },
+          "label": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "normal",
+              "error",
+              "back"
+            ]
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "style": {
+      "type": "string",
+      "description": "HTML (usually <style>/<link>/<script>) placed in every screen's <head>: the agent's own design system"
+    },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 120,
+          "maximum": 3840
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 120,
+          "maximum": 3840
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+    }
+  }
+}

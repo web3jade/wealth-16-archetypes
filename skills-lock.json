@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "skills": {
+    "design-flow": {
+      "source": "stvlynn/design-flow",
+      "commit": "5486d328ac22c00f1d3564ad128a92c8783c5f91",
+      "sourceType": "github",
+      "skillPath": "skills/design-flow/SKILL.md",
+      "computedHash": "081133078bdecd9ad74a0a3cc1b174dfdbfc8f8d8abd9cccdfeb8fd8d679e5f3"
+    }
+  }
+}

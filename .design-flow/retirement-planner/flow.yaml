@@ -1,0 +1,237 @@
+version: 1
+title: Asia Retirement Planner — Retire Type
+viewport: { width: 390, height: 844 }
+style: |
+  <style>
+    :root {
+      --bg0: #071a15; --bg1: #0f2b24; --mint: #c4f061; --foam: #e8f7d2; --muted: #a7c4b0;
+      --font: 'DM Sans', system-ui, sans-serif; --display: Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: var(--font); color: var(--foam);
+      background: linear-gradient(160deg, var(--bg0), var(--bg1));
+      min-height: 100%; padding: 20px;
+    }
+    h1 { font-family: var(--display); font-size: 28px; margin: 0 0 8px; line-height: 1.15; }
+    p { color: var(--muted); line-height: 1.45; margin: 0 0 16px; }
+    .brand { font-family: var(--display); margin-bottom: 18px; }
+    .brand b { color: var(--mint); }
+    .card {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(232,247,210,0.14);
+      border-radius: 22px; padding: 18px; min-height: 720px; display: flex; flex-direction: column;
+    }
+    .field { margin-bottom: 12px; }
+    .field label { display: block; font-size: 12px; color: #9bbf7a; margin-bottom: 6px; }
+    .field input, .field select {
+      width: 100%; border-radius: 14px; border: 1px solid rgba(232,247,210,0.14);
+      background: rgba(0,0,0,0.25); color: var(--foam); padding: 12px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .chip {
+      border-radius: 999px; border: 1px solid rgba(232,247,210,0.14);
+      padding: 10px 12px; background: rgba(0,0,0,0.2); color: var(--foam); font-size: 13px;
+    }
+    .chip.on { background: var(--mint); color: var(--bg0); font-weight: 700; }
+    .spacer { flex: 1; }
+    .row { display: flex; gap: 8px; }
+    .btn {
+      border: 0; border-radius: 999px; padding: 14px 16px; font-weight: 700; cursor: pointer;
+      flex: 1; text-align: center;
+    }
+    .btn.main { background: var(--mint); color: var(--bg0); }
+    .btn.ghost { background: transparent; color: var(--foam); border: 1px solid rgba(232,247,210,0.2); }
+    .code { font-family: var(--display); font-size: 64px; margin: 8px 0 0; color: #f4ffe8; }
+    .title { font-family: var(--display); font-size: 28px; margin: 0; }
+    .social {
+      border-radius: 24px; padding: 18px; margin: 8px 0 16px;
+      background: linear-gradient(145deg, #0f2b24, #1a4d3e 55%, #2f6b4f);
+      border: 1px solid rgba(196,240,97,0.25);
+    }
+    .pill {
+      display: inline-block; border-radius: 999px; padding: 6px 10px; margin: 4px 4px 0 0;
+      background: rgba(15,43,36,0.7); border: 1px solid rgba(196,240,97,0.3); color: var(--mint); font-size: 12px;
+    }
+    .stat { background: rgba(0,0,0,0.22); border-radius: 14px; padding: 12px; margin-bottom: 8px; }
+    .stat b { display: block; font-family: var(--display); font-size: 20px; color: #f4ffe8; }
+    .err { color: #ff8f7a; }
+  </style>
+lanes:
+  - { id: wizard, title: Wizard, tone: success }
+  - { id: reveal, title: Reveal and share, tone: info }
+  - { id: errors, title: Errors and interruptions, tone: danger, enter: any }
+screens:
+  - id: W00
+    title: Welcome
+    html: |
+      <div class="card">
+        <div class="brand">Retire <b>Type</b></div>
+        <h1>Find your Asia retirement personality</h1>
+        <p>Answer a few money questions. Get a 4-letter Retire Type and a social card worth sharing.</p>
+        <div class="spacer"></div>
+        <button class="btn main" data-id="start">Start planning</button>
+      </div>
+  - id: S01
+    lane: wizard
+    title: Locale
+    html: |
+      <div class="card">
+        <div class="brand" style="display:flex;justify-content:space-between;align-items:center">
+          <div>Retire <b>Type</b></div>
+          <div style="font-size:12px;border:1px solid rgba(232,247,210,.2);border-radius:999px;padding:6px 10px">🌐 EN</div>
+        </div>
+        <h1>Where do you live?</h1>
+        <p>Tier 1 markets model statutory accounts more deeply.</p>
+        <div class="field"><label>Country / region</label><select data-id="market"><option>Hong Kong</option><option>Singapore</option><option>Japan</option><option>Other Asia</option></select></div>
+        <div class="field"><label>City</label><select data-id="city"><option>Hong Kong</option></select></div>
+        <div class="spacer"></div>
+        <div class="row"><button class="btn ghost" data-id="back">Back</button><button class="btn main" data-id="continue">Continue</button></div>
+      </div>
+  - id: S02
+    lane: wizard
+    title: Life stage
+    html: |
+      <div class="card">
+        <div class="brand">Retire <b>Type</b></div>
+        <h1>Life stage</h1>
+        <p>Shapes your horizon letter — Early Freedom (E) or Long Run (L).</p>
+        <div class="chips">
+          <span class="chip">Early career</span><span class="chip on">Mid career</span>
+          <span class="chip">Pre-retiree</span><span class="chip">Near retiree</span>
+        </div>
+        <div class="field"><label>Current age</label><input value="32" data-id="age" /></div>
+        <div class="field"><label>Target retire age</label><input value="60" data-id="retire-age" /></div>
+        <div class="spacer"></div>
+        <div class="row"><button class="btn ghost" data-id="back">Back</button><button class="btn main" data-id="continue">Continue</button></div>
+      </div>
+  - id: S03
+    lane: wizard
+    title: Money today
+    html: |
+      <div class="card">
+        <div class="brand">Retire <b>Type</b></div>
+        <h1>Money today</h1>
+        <p>Salary, spend, savings, and statutory balances.</p>
+        <div class="field"><label>Annual salary</label><input value="480000" data-id="salary" /></div>
+        <div class="field"><label>Monthly spend</label><input value="22000" data-id="spend" /></div>
+        <div class="field"><label>Investable savings</label><input value="250000" data-id="savings" /></div>
+        <div class="field"><label>MPF / CPF / pension balance</label><input value="120000" data-id="statutory" /></div>
+        <div class="field"><label>Monthly private savings</label><input value="6000" data-id="monthly-save" /></div>
+        <div class="spacer"></div>
+        <div class="row"><button class="btn ghost" data-id="back">Back</button><button class="btn main" data-id="continue">Continue</button></div>
+      </div>
+  - id: S04
+    lane: wizard
+    title: Lifestyle goal
+    html: |
+      <div class="card">
+        <div class="brand">Retire <b>Type</b></div>
+        <h1>Retirement lifestyle</h1>
+        <p>Modest (M) vs Abundant (A).</p>
+        <div class="chips">
+          <span class="chip">Lean</span><span class="chip on">Same as now</span><span class="chip">Upgrade</span>
+        </div>
+        <div class="spacer"></div>
+        <div class="row"><button class="btn ghost" data-id="back">Back</button><button class="btn main" data-id="continue">Continue</button></div>
+      </div>
+  - id: S05
+    lane: wizard
+    title: Risk appetite
+    html: |
+      <div class="card">
+        <div class="brand">Retire <b>Type</b></div>
+        <h1>Risk appetite</h1>
+        <p>Steady (S) vs Venture (V) — maps to assumed real returns.</p>
+        <div class="chips">
+          <span class="chip">Steady · 2%</span><span class="chip on">Balanced · 4%</span><span class="chip">Venture · 6%</span>
+        </div>
+        <div class="spacer"></div>
+        <div class="row"><button class="btn ghost" data-id="back">Back</button><button class="btn main" data-id="reveal">Reveal my type</button></div>
+      </div>
+  - id: R01
+    lane: reveal
+    title: Type reveal
+    badges: [video]
+    html: |
+      <div class="card">
+        <div class="brand">Retire <b>Type</b></div>
+        <h1>Your Retire Type</h1>
+        <div class="social">
+          <div style="letter-spacing:0.14em;text-transform:uppercase;font-size:11px;color:#9bbf7a;">Retire Type</div>
+          <div class="code">EVAP</div>
+          <div class="title">The Rocket</div>
+          <p style="color:#e8f7d2;opacity:.85">Early out, growth, abundant, mapped.</p>
+          <span class="pill">On track</span><span class="pill">Hong Kong</span><span class="pill">HK$4.2M nest egg</span>
+        </div>
+        <div class="stat"><span>Projected nest egg</span><b>HK$4.2M</b></div>
+        <div class="stat"><span>Required nest egg</span><b>HK$3.8M</b></div>
+        <div class="spacer"></div>
+        <div class="row">
+          <button class="btn main" data-id="share">Share card</button>
+          <button class="btn ghost" data-id="download">Download PNG</button>
+        </div>
+      </div>
+  - id: R02
+    lane: reveal
+    title: Shared
+    html: |
+      <div class="card">
+        <div class="brand">Retire <b>Type</b></div>
+        <h1>Card ready</h1>
+        <p>Share text copied / system share sheet opened. No product CTA in this version — just the personality card.</p>
+        <div class="social">
+          <div class="code" style="font-size:48px">EVAP</div>
+          <div class="title">The Rocket</div>
+          <p>I'm an EVAP — The Rocket</p>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn main" data-id="again">Plan again</button>
+      </div>
+  - id: X01
+    lane: errors
+    title: Missing fields
+    badges: [home]
+    note: Reachable if required money fields are empty
+    html: |
+      <div class="card">
+        <div class="brand">Retire <b>Type</b></div>
+        <h1 class="err">Need a few numbers</h1>
+        <p>Age, salary, and spend are required to classify your type.</p>
+        <div class="spacer"></div>
+        <button class="btn main" data-id="fix">Fix inputs</button>
+      </div>
+  - id: X02
+    lane: errors
+    title: Offline
+    badges: [home]
+    note: Local-first app; share may fail offline
+    html: |
+      <div class="card">
+        <div class="brand">Retire <b>Type</b></div>
+        <h1>You're offline</h1>
+        <p>Your plan is saved on this device. Download PNG still works; system share may not.</p>
+        <div class="spacer"></div>
+        <button class="btn main" data-id="back-results">Back to results</button>
+      </div>
+edges:
+  - { from: W00, to: S01, label: Start planning }
+  - { from: S01, to: S02, label: Continue }
+  - { from: S02, to: S01, label: Back, kind: back }
+  - { from: S02, to: S03, label: Continue }
+  - { from: S03, to: S02, label: Back, kind: back }
+  - { from: S03, to: S04, label: Continue }
+  - { from: S03, to: X01, label: Missing required fields, kind: error }
+  - { from: S04, to: S03, label: Back, kind: back }
+  - { from: S04, to: S05, label: Continue }
+  - { from: S05, to: S04, label: Back, kind: back }
+  - { from: S05, to: R01, label: Reveal my type }
+  - { from: R01, to: R02, label: Share card }
+  - { from: R01, to: R02, label: Download PNG }
+  - { from: R01, to: X02, label: Offline during share, kind: error }
+  - { from: R02, to: W00, label: Plan again }
+  - { from: X01, to: S03, label: Fix inputs, kind: back }
+  - { from: X02, to: R01, label: Back to results, kind: back }
+notes:
+  - Primary growth loop is the social card. No Kamino CTA in this flow.
+  - Letters: E/L horizon, S/V risk, M/A lifestyle, P/F planner style.
+  - Approve this flow before treating React screens as final UX source of truth.

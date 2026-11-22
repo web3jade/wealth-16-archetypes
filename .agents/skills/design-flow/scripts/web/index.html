@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Design Flow</title>
+    <script>
+      (function () {
+        var mq = window.matchMedia("(prefers-color-scheme: dark)");
+        var apply = function () {
+          document.documentElement.classList.toggle("dark", mq.matches);
+        };
+        apply();
+        mq.addEventListener("change", apply);
+        document.documentElement.lang = navigator.language.toLowerCase().startsWith("zh") ? "zh" : "en";
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-C8FxIMus.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BOyFfZ6m.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
