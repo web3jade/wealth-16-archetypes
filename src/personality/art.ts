@@ -22,7 +22,8 @@ import type { TypeCode } from './archetypes'
  * LVAF 破局狂想家 — joker cards + paint
  */
 export function personalityArtUrl(code: TypeCode): string {
-  return `/personalities/${code}.png`
+  const base = import.meta.env.BASE_URL || '/'
+  return `${base}personalities/${code}.png`
 }
 
 export function loadPersonalityArt(code: TypeCode): Promise<HTMLImageElement> {
