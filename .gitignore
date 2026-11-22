@@ -1,0 +1,10 @@
+node_modules
+dist
+.DS_Store
+*.local
+.venv-img
+*.tsbuildinfo
+.agents/
+.design-flow/
+public/personalities/_debug*
+public/personalities/_sheet.jpg
