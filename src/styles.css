@@ -358,7 +358,9 @@ select {
 .landing {
   position: relative;
   min-height: 100vh;
-  overflow: hidden;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
@@ -442,9 +444,9 @@ select {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  min-height: 420px;
+  min-height: min(420px, 48vh);
   margin-top: 0.5rem;
-  padding: 0 0.5rem 0;
+  padding: 0 0.5rem 1.25rem;
 }
 
 .poster-glow {
@@ -550,6 +552,18 @@ select {
 }
 
 @media (max-width: 640px) {
+  .landing-hero {
+    margin-top: 0.75rem;
+  }
+
+  .landing-brand {
+    font-size: clamp(2.2rem, 11vw, 3.2rem);
+  }
+
+  .poster-stage {
+    min-height: 280px;
+  }
+
   .poster-cast {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -562,16 +576,36 @@ select {
   .poster-figure {
     scroll-snap-align: center;
     margin: 0 -0.35rem;
-    width: 7.2rem;
+    width: 6.4rem;
   }
 
   .poster-figure-0,
   .poster-figure-1 {
-    width: 8rem;
+    width: 7.2rem;
   }
 
   .poster-name {
     white-space: normal;
+  }
+}
+
+@media (max-height: 740px) {
+  .landing-hero {
+    margin-top: 0.6rem;
+  }
+
+  .landing-sub {
+    margin-bottom: 0.9rem;
+  }
+
+  .poster-stage {
+    min-height: 260px;
+  }
+
+  .poster-figure,
+  .poster-figure-0,
+  .poster-figure-1 {
+    width: 5.8rem;
   }
 }
 
