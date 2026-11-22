@@ -13,12 +13,20 @@ const OTHER_CITY: CityPack = {
   colIndex: 1,
 }
 
+function ensureOtherCity(market: MarketPack): MarketPack {
+  const withoutLegacyOther = market.cities.filter((c) => c.id !== 'other' && c.id !== OTHER_CITY_ID)
+  return {
+    ...market,
+    cities: [...withoutLegacyOther, OTHER_CITY],
+  }
+}
+
 export const MARKETS: MarketPack[] = [
   ...TIER1_MARKETS,
   ...TIER2_MARKETS,
   ...TIER3_MARKETS,
   ...GLOBAL_MARKETS,
-]
+].map(ensureOtherCity)
 
 /** Preferred display order for region optgroups. */
 export const REGION_ORDER: MarketRegion[] = [
@@ -45,13 +53,7 @@ export function getCity(market: MarketPack, cityId: string) {
 
 /** Cities shown in the locale picker — always ends with an Other cities option. */
 export function citiesForSelect(market: MarketPack): CityPack[] {
-  const hasOther = market.cities.some((c) => c.id === OTHER_CITY_ID || c.id === 'other')
-  if (hasOther) {
-    return market.cities.map((c) =>
-      c.id === 'other' ? { ...c, id: OTHER_CITY_ID, name: OTHER_CITY.name } : c,
-    )
-  }
-  return [...market.cities, OTHER_CITY]
+  return ensureOtherCity(market).cities
 }
 
 export function isOtherCity(cityId: string): boolean {

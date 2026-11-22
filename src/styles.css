@@ -387,8 +387,9 @@ select {
 .landing-hero {
   position: relative;
   z-index: 2;
+  flex: 0 0 auto;
   width: min(720px, calc(100% - 2.4rem));
-  margin: 1.5rem auto 0;
+  margin: 1.1rem auto 0;
   text-align: center;
 }
 
@@ -440,20 +441,21 @@ select {
 .poster-stage {
   position: relative;
   z-index: 1;
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  min-height: min(420px, 48vh);
-  margin-top: 0.5rem;
-  padding: 0 0.5rem 1.25rem;
+  width: 100%;
+  min-height: 340px;
+  margin-top: 0.35rem;
+  padding: 0 0.75rem 1.1rem;
 }
 
 .poster-glow {
   position: absolute;
   left: 50%;
   bottom: 8%;
-  width: min(920px, 96vw);
+  width: min(980px, 96vw);
   height: 55%;
   transform: translateX(-50%);
   background: radial-gradient(ellipse at center, rgba(59, 124, 255, 0.2), transparent 68%);
@@ -463,20 +465,20 @@ select {
 .poster-cast {
   list-style: none;
   margin: 0;
-  padding: 0 0 0.5rem;
+  padding: 0;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   gap: 0;
-  width: 100%;
-  max-width: 1100px;
+  width: min(100%, 1080px);
 }
 
 .poster-figure {
   position: relative;
-  flex: 0 0 auto;
-  width: clamp(5.5rem, 15vw, 10.5rem);
-  margin: 0 -0.55rem;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 11.5rem;
+  margin: 0 -0.45rem;
   text-align: center;
   animation: poster-rise 0.9s ease both;
   animation-delay: calc(var(--i, 0) * 0.08s);
@@ -485,7 +487,7 @@ select {
 }
 
 .poster-figure:hover {
-  transform: translateY(-14px) scale(1.06);
+  transform: translateY(-14px) scale(1.05);
   z-index: 20;
 }
 
@@ -502,7 +504,7 @@ select {
   display: block;
   margin-top: 0.35rem;
   font-family: var(--font-display);
-  font-size: 0.78rem;
+  font-size: clamp(0.72rem, 1.5vw, 0.86rem);
   font-weight: 800;
   letter-spacing: 0.04em;
   color: #1a2b55;
@@ -510,7 +512,7 @@ select {
 
 .poster-name {
   display: block;
-  font-size: 0.72rem;
+  font-size: clamp(0.68rem, 1.4vw, 0.8rem);
   color: var(--muted);
   line-height: 1.25;
   max-width: 100%;
@@ -520,11 +522,13 @@ select {
 }
 
 .poster-figure-0 {
-  width: clamp(6.5rem, 17vw, 12rem);
+  flex-grow: 1.18;
+  max-width: 13rem;
   z-index: 12;
 }
 .poster-figure-1 {
-  width: clamp(6rem, 16vw, 11rem);
+  flex-grow: 1.1;
+  max-width: 12rem;
   z-index: 11;
 }
 .poster-figure-2 {
@@ -551,7 +555,7 @@ select {
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   .landing-hero {
     margin-top: 0.75rem;
   }
@@ -561,51 +565,26 @@ select {
   }
 
   .poster-stage {
-    min-height: 280px;
+    min-height: 300px;
+    padding-bottom: 0.85rem;
   }
 
   .poster-cast {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    justify-content: flex-start;
-    padding: 0 1rem 1rem;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
+    width: 100%;
   }
 
   .poster-figure {
-    scroll-snap-align: center;
-    margin: 0 -0.35rem;
-    width: 6.4rem;
+    margin: 0 -0.3rem;
+    max-width: none;
   }
 
   .poster-figure-0,
   .poster-figure-1 {
-    width: 7.2rem;
+    max-width: none;
   }
 
   .poster-name {
     white-space: normal;
-  }
-}
-
-@media (max-height: 740px) {
-  .landing-hero {
-    margin-top: 0.6rem;
-  }
-
-  .landing-sub {
-    margin-bottom: 0.9rem;
-  }
-
-  .poster-stage {
-    min-height: 260px;
-  }
-
-  .poster-figure,
-  .poster-figure-0,
-  .poster-figure-1 {
-    width: 5.8rem;
   }
 }
 
