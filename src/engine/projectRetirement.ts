@@ -34,7 +34,10 @@ function lifestyleSpendMultiplier(goal: WizardInput['lifestyleGoal']): number {
 
 function cityCol(market: MarketPack, cityId: string): number {
   const city = market.cities.find((c) => c.id === cityId)
-  return city?.colIndex ?? 1
+  if (city) return city.colIndex
+  // other-cities / legacy "other" → national baseline
+  if (cityId === 'other-cities' || cityId === 'other') return 1
+  return 1
 }
 
 function annualStatutoryContribution(input: WizardInput, market: MarketPack): number {

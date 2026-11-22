@@ -1,8 +1,17 @@
-import type { MarketPack, MarketRegion } from '../engine/types'
+import type { CityPack, MarketPack, MarketRegion } from '../engine/types'
 import { GLOBAL_MARKETS } from './global'
 import { TIER1_MARKETS } from './tier1'
 import { TIER2_MARKETS } from './tier2'
 import { TIER3_MARKETS } from './tier3'
+
+/** Shared fallback city for every market (national baseline COL). */
+export const OTHER_CITY_ID = 'other-cities'
+
+const OTHER_CITY: CityPack = {
+  id: OTHER_CITY_ID,
+  name: 'Other cities',
+  colIndex: 1,
+}
 
 export const MARKETS: MarketPack[] = [
   ...TIER1_MARKETS,
@@ -28,7 +37,25 @@ export function getMarket(id: string): MarketPack | undefined {
 }
 
 export function getCity(market: MarketPack, cityId: string) {
-  return market.cities.find((c) => c.id === cityId) ?? market.cities[0]
+  const found = market.cities.find((c) => c.id === cityId)
+  if (found) return found
+  if (cityId === OTHER_CITY_ID || cityId === 'other') return OTHER_CITY
+  return market.cities[0]
+}
+
+/** Cities shown in the locale picker — always ends with an Other cities option. */
+export function citiesForSelect(market: MarketPack): CityPack[] {
+  const hasOther = market.cities.some((c) => c.id === OTHER_CITY_ID || c.id === 'other')
+  if (hasOther) {
+    return market.cities.map((c) =>
+      c.id === 'other' ? { ...c, id: OTHER_CITY_ID, name: OTHER_CITY.name } : c,
+    )
+  }
+  return [...market.cities, OTHER_CITY]
+}
+
+export function isOtherCity(cityId: string): boolean {
+  return cityId === OTHER_CITY_ID || cityId === 'other'
 }
 
 export function marketsByTier(tier: 1 | 2 | 3): MarketPack[] {

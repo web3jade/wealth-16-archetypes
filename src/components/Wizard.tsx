@@ -16,7 +16,7 @@ import type {
   WizardInput,
 } from '../engine/types'
 import { marketDisclaimer, t, type Lang } from '../i18n/messages'
-import { getMarket, marketsGroupedByRegion } from '../markets'
+import { citiesForSelect, getMarket, isOtherCity, marketsGroupedByRegion } from '../markets'
 import { classifyPersonality } from '../personality/classify'
 import { buildAgentBrief, copyAgentBrief } from '../share/buildAgentBrief'
 import { buildSharePayload, openShareToX } from '../share/buildSharePayload'
@@ -211,12 +211,12 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
                 <label htmlFor="city">{t(lang, 'locale.city')}</label>
                 <select
                   id="city"
-                  value={input.cityId}
+                  value={isOtherCity(input.cityId) ? 'other-cities' : input.cityId}
                   onChange={(e) => patch({ cityId: e.target.value })}
                 >
-                  {market.cities.map((c) => (
+                  {citiesForSelect(market).map((c) => (
                     <option key={c.id} value={c.id}>
-                      {c.name}
+                      {isOtherCity(c.id) ? t(lang, 'locale.city.other') : c.name}
                     </option>
                   ))}
                 </select>
