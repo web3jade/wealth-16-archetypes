@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#f3f7ff"/>
+      <stop offset="100%" stop-color="#e8f0ff"/>
+    </linearGradient>
+    <linearGradient id="code" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a2b55"/>
+      <stop offset="55%" stop-color="#3b7cff"/>
+      <stop offset="100%" stop-color="#35c4e8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg)"/>
+  <circle cx="600" cy="560" r="420" fill="#3b7cff" fill-opacity="0.05"/>
+
+  <text x="600" y="160" text-anchor="middle" fill="#4f7fe0" font-size="36" font-weight="600"
+    font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">财富16型</text>
+
+  <text x="600" y="340" text-anchor="middle" fill="url(#code)" font-size="132" font-weight="800"
+    font-family="Avenir Next, Helvetica Neue, sans-serif" letter-spacing="6">LVMP</text>
+
+  <text x="600" y="450" text-anchor="middle" fill="#121826" font-size="68" font-weight="700"
+    font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">时间猎手</text>
+
+  <text x="600" y="540" text-anchor="middle" fill="#5c6b86" font-size="34" font-weight="500"
+    font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">长跑道 · 进取 · 简约 · 有计划</text>
+
+  <text x="600" y="640" text-anchor="middle" fill="#3a4a66" font-size="36" font-weight="500" font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">时间就是最大优势，保持精简开支，让复</text>
+  <text x="600" y="692" text-anchor="middle" fill="#3a4a66" font-size="36" font-weight="500" font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">利跨十年发酵。</text>
+  <text x="600" y="800" text-anchor="middle" fill="#5c6b86" font-size="30" font-weight="500" font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">优势  跨十年的复利耐心</text>
+  <text x="600" y="854" text-anchor="middle" fill="#5c6b86" font-size="30" font-weight="500" font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">盲点  可能把享受推迟太久</text>
+
+  <text x="600" y="1420" text-anchor="middle" fill="#9aa8c0" font-size="24"
+    font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">16 Wealth Archetypes · 仅供教育娱乐</text>
+</svg>
