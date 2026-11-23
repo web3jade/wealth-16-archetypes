@@ -267,7 +267,7 @@ const en: Dict = {
   'terms.p4':
     'By continuing, you agree you are responsible for any decisions you make. Seek a licensed adviser for real planning.',
   'terms.p5':
-    'We may collect product usage and UI/UX experience data to improve future versions. This does not include personal sensitive information.',
+    'To improve the product, we collect usage data and some planner inputs and send them to an analytics service. We do not use this data to identify you, and we do not publish money amounts on share cards or on GitHub. By continuing, you agree to this collection and processing.',
   'terms.agree': 'I have read and agree to these terms of use.',
   'terms.cancel': 'Not now',
   'terms.continue': 'Agree & continue',
@@ -593,7 +593,7 @@ const zh: Dict = {
   'terms.p3': '你填写的内容保存在本浏览器本地。分享卡片不会带上你的具体财务数字。',
   'terms.p4': '继续使用即表示：任何决策由你自行负责。正式规划请咨询持牌顾问。',
   'terms.p5':
-    '本产品会收集使用数据与 UI/UX 体验数据，用于优化后续产品，不涉及个人敏感信息。',
+    '为改进产品，我们会收集使用数据与部分测算输入发送至数据分析服务。我们不会用这些数据识别你的真实身份，也不会把金额公开到分享卡片或 GitHub。继续使用即表示你同意上述收集与处理。',
   'terms.agree': '我已阅读并同意以上使用守则。',
   'terms.cancel': '先不要',
   'terms.continue': '同意并继续',
@@ -900,7 +900,7 @@ const ja: Dict = {
   'terms.p3': '入力はブラウザのローカルに保存されます。共有カードに金額は出ません。',
   'terms.p4': '続行すると、意思決定の責任はご自身にあることに同意したものとします。',
   'terms.p5':
-    '本製品は、今後の改善のため利用状況および UI/UX 体験データを収集する場合があります。個人の機微情報は含みません。',
+    '製品改善のため、利用データおよび一部の試算入力を分析サービスへ送信します。これらのデータで個人を特定することはなく、金額を共有カードや GitHub に公開することもありません。続行すると、上記の収集・処理に同意したものとします。',
   'terms.agree': '利用規約を読み、同意します。',
   'terms.cancel': 'やめる',
   'terms.continue': '同意して続ける',
@@ -1207,7 +1207,7 @@ const ko: Dict = {
   'terms.p3': '입력값은 이 브라우저에 로컬 저장됩니다. 공유 카드에는 금액이 나오지 않습니다.',
   'terms.p4': '계속하면 의사결정의 책임이 본인에게 있음에 동의하는 것입니다.',
   'terms.p5':
-    '본 제품은 이후 개선을 위해 사용 데이터와 UI/UX 경험 데이터를 수집할 수 있습니다. 개인 민감정보는 포함하지 않습니다.',
+    '제품 개선을 위해 사용 데이터와 일부 계산 입력값을 수집해 분석 서비스로 전송합니다. 이 데이터로 사용자를 식별하지 않으며, 금액을 공유 카드나 GitHub에 공개하지 않습니다. 계속하면 위 수집·처리에 동의한 것으로 봅니다.',
   'terms.agree': '이용 수칙을 읽고 동의합니다.',
   'terms.cancel': '나중에',
   'terms.continue': '동의하고 계속',

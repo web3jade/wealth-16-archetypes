@@ -1,7 +1,8 @@
 import posthog from 'posthog-js'
 import type { Lang } from '../i18n/messages'
 import type { PersonalityResult } from '../personality/classify'
-import type { WizardInput } from '../engine/types'
+import { getRiskBand } from '../engine/riskBands'
+import type { AssumptionOverrides, WizardInput } from '../engine/types'
 
 const TOKEN = import.meta.env.VITE_POSTHOG_PROJECT_TOKEN as string | undefined
 const HOST = (import.meta.env.VITE_POSTHOG_HOST as string | undefined) || 'https://us.i.posthog.com'
@@ -47,6 +48,16 @@ export function ageBucket(age: number): string {
   return '65+'
 }
 
+/** Round finite money inputs for analytics; omit blanks. */
+function moneyValue(n: number): number | null {
+  return Number.isFinite(n) ? Math.round(n) : null
+}
+
+function pctValue(fraction: number | undefined): number | null {
+  if (fraction === undefined || !Number.isFinite(fraction)) return null
+  return Math.round(fraction * 1000) / 10
+}
+
 export function trackLandingView(lang: Lang): void {
   track('landing_view', { lang })
 }
@@ -71,6 +82,7 @@ export function trackTypeRevealed(
   lang: Lang,
   input: WizardInput,
   personality: PersonalityResult,
+  assumptions?: AssumptionOverrides,
 ): void {
   track('type_revealed', {
     lang,
@@ -84,9 +96,21 @@ export function trackTypeRevealed(
     city_id: input.cityId,
     life_stage: input.lifeStage,
     risk_band: input.riskBand,
+    /** Risk-page choice: 2 / 4 / 6 */
+    expected_return_pct: getRiskBand(input.riskBand).expectedRealReturn * 100,
     lifestyle_goal: input.lifestyleGoal,
     age_bucket: ageBucket(Number.isFinite(input.currentAge) ? input.currentAge : 0),
     retire_age_bucket: ageBucket(input.retireAge),
+    current_age: Number.isFinite(input.currentAge) ? Math.round(input.currentAge) : null,
+    retire_age: Number.isFinite(input.retireAge) ? Math.round(input.retireAge) : null,
+    annual_salary: moneyValue(input.annualSalary),
+    monthly_spend: moneyValue(input.monthlySpend),
+    current_savings: moneyValue(input.currentSavings),
+    statutory_balance: moneyValue(input.statutoryBalance),
+    monthly_savings: moneyValue(input.monthlySavings),
+    one_off_goals: moneyValue(input.oneOffGoals),
+    inflation_pct: pctValue(assumptions?.inflation),
+    asset_return_pct: pctValue(assumptions?.realReturn),
   })
 }
 

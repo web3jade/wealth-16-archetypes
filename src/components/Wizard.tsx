@@ -130,8 +130,8 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
     const key = `${personality.code}:${input.marketId}:${input.cityId}:${lang}`
     if (revealedKey.current === key) return
     revealedKey.current = key
-    trackTypeRevealed(lang, normalized, personality)
-  }, [step, lang, normalized, personality])
+    trackTypeRevealed(lang, normalized, personality, assumptions)
+  }, [step, lang, normalized, personality, assumptions])
 
   const patch = (partial: Partial<WizardInput>) => setInput((prev) => ({ ...prev, ...partial }))
 
