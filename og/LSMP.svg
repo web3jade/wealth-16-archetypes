@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#ffffff"/>
@@ -12,26 +12,25 @@
       <stop offset="100%" stop-color="#35c4e8"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="1500" fill="url(#bg)"/>
-  <circle cx="600" cy="560" r="420" fill="#3b7cff" fill-opacity="0.05"/>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="600" cy="340" r="270" fill="#3b7cff" fill-opacity="0.06"/>
 
-  <text x="600" y="160" text-anchor="middle" fill="#4f7fe0" font-size="36" font-weight="600"
+  <text x="600" y="108" text-anchor="middle" fill="#4f7fe0" font-size="26" font-weight="600"
     font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">财富16型</text>
 
-  <text x="600" y="340" text-anchor="middle" fill="url(#code)" font-size="132" font-weight="800"
-    font-family="Avenir Next, Helvetica Neue, sans-serif" letter-spacing="6">LSMP</text>
+  <text x="600" y="198" text-anchor="middle" fill="url(#code)" font-size="78" font-weight="800"
+    font-family="Avenir Next, Helvetica Neue, sans-serif" letter-spacing="4">LSMP</text>
 
-  <text x="600" y="450" text-anchor="middle" fill="#121826" font-size="68" font-weight="700"
+  <text x="600" y="262" text-anchor="middle" fill="#121826" font-size="42" font-weight="700"
     font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">稳健大管家</text>
 
-  <text x="600" y="540" text-anchor="middle" fill="#5c6b86" font-size="34" font-weight="500"
+  <text x="600" y="314" text-anchor="middle" fill="#5c6b86" font-size="24" font-weight="500"
     font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">长跑道 · 稳健 · 简约 · 有计划</text>
 
-  <text x="600" y="640" text-anchor="middle" fill="#3a4a66" font-size="36" font-weight="500" font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">稳扎稳打打长局，持续投入、克制需求、</text>
-  <text x="600" y="692" text-anchor="middle" fill="#3a4a66" font-size="36" font-weight="500" font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">账目清晰。</text>
-  <text x="600" y="800" text-anchor="middle" fill="#5c6b86" font-size="30" font-weight="500" font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">优势  可靠与耐心</text>
-  <text x="600" y="854" text-anchor="middle" fill="#5c6b86" font-size="30" font-weight="500" font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">盲点  可能错过可观的成长机会</text>
+  <text x="600" y="392" text-anchor="middle" fill="#3a4a66" font-size="26" font-weight="500" font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">稳扎稳打打长局，持续投入、克制需求、账目清晰。</text>
+  <text x="600" y="450" text-anchor="middle" fill="#5c6b86" font-size="22" font-weight="500" font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">优势  可靠与耐心</text>
+  <text x="600" y="486" text-anchor="middle" fill="#5c6b86" font-size="22" font-weight="500" font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">盲点  可能错过可观的成长机会</text>
 
-  <text x="600" y="1420" text-anchor="middle" fill="#9aa8c0" font-size="24"
+  <text x="600" y="592" text-anchor="middle" fill="#9aa8c0" font-size="17"
     font-family="PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, sans-serif">16 Wealth Archetypes · 仅供教育娱乐</text>
 </svg>
