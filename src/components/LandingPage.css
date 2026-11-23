@@ -1,0 +1,587 @@
+/**
+ * Landing — layout-spec canvas 928×1664.
+ * Hero copy is ONE stacked block with fixed gaps (no absolute-overlap).
+ */
+
+.wealth-page {
+  --copy-top: 12.5%;
+  --gap-eyebrow-title: 10px;
+  --gap-title-tagline: 14px;
+  --gap-tagline-cta: 22px;
+  --title-lh: 1.08;
+  --tagline-lh: 1.3;
+
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: var(--font-body, 'DM Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif);
+}
+
+.wealth-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, #dceaff 0%, #bfdfff 48%, #d8e9ff 100%);
+}
+
+.wealth-bg::after {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 26%;
+  height: 42%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.82), transparent 70%);
+  pointer-events: none;
+}
+
+/* Stage curves — always docked to bottom so desktop doesn't leave a dead gap */
+.wealth-bg-curves {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  width: 100%;
+  height: auto;
+  max-height: 42%;
+  object-fit: cover;
+  object-position: top center;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.wealth-lang {
+  position: absolute;
+  top: max(2.4%, env(safe-area-inset-top));
+  right: 4.5%;
+  z-index: 20;
+}
+
+.wealth-page .lang-trigger {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.78);
+  color: #19366e;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 18px rgba(40, 70, 140, 0.08);
+}
+
+/* ——— Hero copy stack ——— */
+.wealth-page .hero-copy {
+  position: absolute;
+  left: 50%;
+  top: var(--copy-top);
+  transform: translateX(-50%);
+  z-index: 5;
+  width: min(94%, 720px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.wealth-page .eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  margin: 0 0 var(--gap-eyebrow-title);
+  color: #3779ee;
+  font-size: clamp(11px, 3vw, 15px);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.wealth-page .eyebrow-line {
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: #80aaf9;
+  flex: 0 0 auto;
+}
+
+.wealth-page .main-title {
+  width: 100%;
+  margin: 0 0 var(--gap-title-tagline);
+  font-family: var(--font-display, Outfit, 'DM Sans', sans-serif);
+  font-size: clamp(2.6rem, 13vw, 3.6rem);
+  font-weight: 900;
+  line-height: var(--title-lh);
+  letter-spacing: -0.04em;
+  background: linear-gradient(100deg, #2454b7, #2679ff, #12b5e8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.wealth-page .main-title span {
+  font-weight: 900;
+}
+
+/* Tagline: ALWAYS one line — shrink type, never wrap */
+.wealth-page .subtitle {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 var(--gap-tagline-cta);
+  color: #526b99;
+  font-size: clamp(11px, 3.55vw, 1.1rem);
+  font-weight: 600;
+  line-height: var(--tagline-lh);
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.wealth-page .cta-slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.wealth-page .sparkles {
+  position: absolute;
+  left: -28px;
+  top: -18px;
+  width: 52px;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+.wealth-page .start-button {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 260px;
+  height: 56px;
+  flex: 0 0 auto;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(100deg, #3476ff, #12b8e8);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  box-shadow: 0 14px 32px rgba(48, 130, 245, 0.24);
+  cursor: pointer;
+}
+
+.wealth-page .start-button:active {
+  transform: scale(0.97);
+}
+
+.wealth-page .button-arrow {
+  flex: 0 0 auto;
+  font-size: 26px;
+  font-weight: 300;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+/* Mid-stage decor — sit in the gap between CTA and cast */
+.wealth-page .coin {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  user-select: none;
+  height: auto;
+}
+
+.wealth-page .coin-left {
+  left: 3%;
+  top: 31%;
+  bottom: auto;
+  width: clamp(48px, 12vw, 76px);
+  z-index: 6;
+}
+
+.wealth-page .coin-right {
+  left: auto;
+  right: 4%;
+  top: 34%;
+  bottom: auto;
+  width: clamp(40px, 10vw, 64px);
+  z-index: 6;
+}
+
+.wealth-page .growth-arrow {
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 30%;
+  bottom: auto;
+  width: clamp(100px, 26vw, 160px);
+  height: auto;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.42;
+  transform: translateX(-50%);
+}
+
+/* characters — two tall rows docked to bottom, eat the mid gap */
+.wealth-page .character-section {
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  top: auto;
+  bottom: max(0.45rem, env(safe-area-inset-bottom));
+  z-index: 5;
+  width: auto;
+}
+
+.wealth-page .character-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: auto auto;
+  align-items: end;
+  column-gap: 0.4rem;
+  row-gap: 0.4rem;
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+.wealth-page .character-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Dividers only between columns (not at end of each row) */
+.wealth-page .character-card:not(:nth-child(3n))::after {
+  content: '';
+  position: absolute;
+  right: -0.15rem;
+  bottom: 0.15rem;
+  width: 1px;
+  height: 2.1em;
+  background: rgba(62, 112, 190, 0.2);
+  pointer-events: none;
+}
+
+.wealth-page .character-image {
+  width: 100%;
+  height: clamp(145px, 22svh, 190px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.wealth-page .character-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 12px 18px rgba(26, 43, 85, 0.15));
+  user-select: none;
+  pointer-events: none;
+}
+
+.wealth-page .character-1 .character-image,
+.wealth-page .character-4 .character-image {
+  height: clamp(148px, 22.5svh, 194px);
+}
+.wealth-page .character-2 .character-image,
+.wealth-page .character-5 .character-image {
+  height: clamp(158px, 23.5svh, 204px);
+}
+.wealth-page .character-3 .character-image,
+.wealth-page .character-6 .character-image {
+  height: clamp(152px, 23svh, 198px);
+}
+
+.wealth-page .character-info {
+  width: 100%;
+  margin-top: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.12rem;
+  text-align: center;
+  padding: 0 0.25rem;
+  min-height: 2.35em;
+  box-sizing: border-box;
+}
+
+.wealth-page .character-info strong {
+  color: #193b78;
+  font-family: var(--font-display, Outfit, 'DM Sans', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+}
+
+.wealth-page .character-info span {
+  color: #607da9;
+  font-size: 0.6rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+@media (max-width: 719px) {
+  .wealth-page {
+    --copy-top: 8%;
+    --gap-eyebrow-title: 6px;
+    --gap-title-tagline: 10px;
+    --gap-tagline-cta: 14px;
+    height: 100svh;
+    min-height: 100svh;
+    overflow: hidden;
+  }
+
+  /* Keep Chinese tagline on one line at ~390px */
+  .wealth-page .subtitle {
+    font-size: clamp(11px, 3.7vw, 14px);
+    letter-spacing: -0.01em;
+  }
+
+  .wealth-page .main-title {
+    font-size: clamp(2.35rem, 12vw, 3.05rem);
+  }
+
+  .wealth-page .start-button {
+    width: 240px;
+    height: 52px;
+    font-size: 16px;
+  }
+}
+
+@media (max-height: 700px) and (max-width: 719px) {
+  .wealth-page {
+    --copy-top: 7%;
+    --gap-eyebrow-title: 5px;
+    --gap-title-tagline: 8px;
+    --gap-tagline-cta: 12px;
+  }
+
+  .wealth-page .main-title {
+    font-size: clamp(2.15rem, 10.5vw, 2.7rem);
+  }
+
+  .wealth-page .subtitle {
+    font-size: clamp(10px, 3.4vw, 13px);
+    white-space: nowrap;
+  }
+
+  .wealth-page .start-button {
+    width: 228px;
+    height: 48px;
+    font-size: 15px;
+  }
+
+  /* Tall 2-row cast — fill mid gap on short phones */
+  .wealth-page .character-image,
+  .wealth-page .character-1 .character-image,
+  .wealth-page .character-2 .character-image,
+  .wealth-page .character-3 .character-image,
+  .wealth-page .character-4 .character-image,
+  .wealth-page .character-5 .character-image,
+  .wealth-page .character-6 .character-image {
+    height: clamp(158px, 24svh, 178px);
+  }
+
+  .wealth-page .character-grid {
+    row-gap: 0.2rem;
+  }
+
+  .wealth-page .character-info {
+    min-height: 2em;
+    margin-top: 0.15rem;
+  }
+
+  .wealth-page .character-info strong {
+    font-size: 0.68rem;
+  }
+
+  .wealth-page .character-info span {
+    font-size: 0.55rem;
+  }
+
+  .wealth-page .coin-left {
+    width: clamp(36px, 10vw, 52px);
+  }
+
+  .wealth-page .coin-right {
+    width: clamp(32px, 9vw, 48px);
+  }
+
+  .wealth-page .growth-arrow {
+    width: clamp(70px, 20vw, 110px);
+  }
+}
+
+@media (min-width: 720px) {
+  .wealth-page {
+    --copy-top: 8%;
+    --gap-eyebrow-title: 14px;
+    --gap-title-tagline: 18px;
+    --gap-tagline-cta: 28px;
+    min-height: 100svh;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .wealth-page .lang-trigger {
+    padding: 12px 22px;
+    font-size: 15px;
+  }
+
+  .wealth-page .eyebrow {
+    font-size: 16px;
+    letter-spacing: 0.28em;
+  }
+
+  .wealth-page .eyebrow-line {
+    width: 34px;
+  }
+
+  .wealth-page .main-title {
+    font-size: clamp(3.2rem, 5.5vw, 4.4rem);
+  }
+
+  .wealth-page .subtitle {
+    font-size: clamp(1rem, 1.4vw, 1.25rem);
+  }
+
+  .wealth-page .start-button {
+    width: 280px;
+    height: 60px;
+    font-size: 18px;
+  }
+
+  .wealth-page .sparkles {
+    left: -36px;
+    top: -22px;
+    width: 64px;
+  }
+
+  .wealth-bg-curves {
+    max-height: min(46vh, 460px);
+  }
+
+  /* Tablet / desktop — single-row cast */
+  .wealth-page .character-section {
+    left: 50%;
+    right: auto;
+    top: auto;
+    bottom: clamp(1rem, 3.5vh, 2.5rem);
+    transform: translateX(-50%);
+    width: min(1080px, 92vw);
+  }
+
+  .wealth-page .character-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: auto;
+    max-width: none;
+    column-gap: 0;
+    row-gap: 0;
+  }
+
+  .wealth-page .coin-left {
+    left: max(1.5%, calc(50% - 560px));
+    top: auto;
+    bottom: clamp(11rem, 28vh, 16rem);
+    width: 86px;
+  }
+
+  .wealth-page .coin-right {
+    left: auto;
+    right: max(2%, calc(50% - 520px));
+    top: auto;
+    bottom: clamp(12rem, 30vh, 17rem);
+    width: 74px;
+    transform: none;
+  }
+
+  .wealth-page .growth-arrow {
+    left: auto;
+    right: max(4%, calc(50% - 480px));
+    top: auto;
+    bottom: clamp(8rem, 20vh, 13rem);
+    width: clamp(180px, 18vw, 260px);
+    transform: none;
+    opacity: 0.9;
+  }
+
+  .wealth-page .character-image {
+    height: clamp(200px, 28vh, 260px);
+  }
+
+  .wealth-page .character-1 .character-image {
+    height: clamp(200px, 28vh, 260px);
+  }
+  .wealth-page .character-2 .character-image {
+    height: clamp(230px, 32vh, 290px);
+  }
+  .wealth-page .character-3 .character-image {
+    height: clamp(230px, 32vh, 290px);
+  }
+  .wealth-page .character-4 .character-image {
+    height: clamp(185px, 26vh, 235px);
+  }
+  .wealth-page .character-5 .character-image {
+    height: clamp(200px, 28vh, 260px);
+  }
+  .wealth-page .character-6 .character-image {
+    height: clamp(200px, 28vh, 260px);
+  }
+
+  /* Dividers between all six in one row */
+  .wealth-page .character-card::after {
+    display: none;
+  }
+
+  .wealth-page .character-card:not(:last-child)::after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0.2rem;
+    width: 1px;
+    height: 2.6em;
+    background: rgba(62, 112, 190, 0.2);
+    pointer-events: none;
+  }
+
+  .wealth-page .character-info {
+    min-height: 2.8em;
+    margin-top: 0.5rem;
+  }
+
+  .wealth-page .character-info strong {
+    font-size: 1rem;
+  }
+
+  .wealth-page .character-info span {
+    font-size: 0.8rem;
+  }
+}

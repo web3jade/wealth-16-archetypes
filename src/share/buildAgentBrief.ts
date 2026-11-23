@@ -2,7 +2,7 @@ import type { PlanAdvice } from '../engine/advice'
 import { formatMoney } from '../engine/projectRetirement'
 import type { MarketPack, ProjectionResult, WizardInput } from '../engine/types'
 import { t, type Lang } from '../i18n/messages'
-import { cityLabel, marketLabel } from '../i18n/places'
+import { cityLabel, marketLabel, statutoryLabel } from '../i18n/places'
 import type { PersonalityResult } from '../personality/classify'
 
 export interface AgentBriefInput {
@@ -45,7 +45,7 @@ export function buildAgentBrief(ctx: AgentBriefInput): string {
     `- ${t(lang, 'money.salary')}: ${money(input.annualSalary)}`,
     `- ${t(lang, 'money.spend')}: ${money(input.monthlySpend)}`,
     `- ${t(lang, 'money.savings')}: ${money(input.currentSavings)}`,
-    `- ${market.statutory?.label ?? t(lang, 'money.retirementAccount')}: ${money(input.statutoryBalance)}`,
+    `- ${statutoryLabel(lang, market.id, market.statutory?.label)}: ${money(input.statutoryBalance)}`,
     `- ${t(lang, 'money.monthlySave')}: ${money(input.monthlySavings)}`,
     `- ${t(lang, 'money.oneOff')}: ${money(input.oneOffGoals)}`,
     `- ${t(lang, 'risk.title')}: ${input.riskBand}`,
@@ -63,7 +63,6 @@ export function buildAgentBrief(ctx: AgentBriefInput): string {
     '',
     `## ${t(lang, 'agent.section.advice')}`,
     `- ${t(lang, 'agent.saveDelta')}: ${money(advice.monthlySaveDelta)}`,
-    `- ${t(lang, 'agent.earnDelta')}: ${money(advice.monthlyEarnDelta)}`,
     `- ${t(lang, 'agent.breakEven')}: ${advice.breakEvenRetireAge ?? t(lang, 'agent.breakEven.none')}`,
     `- ${t(lang, 'results.portfolio')}: ${advice.portfolio.slices
       .filter((s) => s.pct > 0)

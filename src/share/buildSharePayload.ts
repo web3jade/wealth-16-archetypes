@@ -2,6 +2,7 @@ import type { Lang } from '../i18n/messages'
 import { t } from '../i18n/messages'
 import { ARCHETYPES } from '../personality/archetypes'
 import type { PersonalityResult } from '../personality/classify'
+import { renderSocialCardBlob, triggerBlobDownload } from './downloadCard'
 
 export interface SharePayload {
   text: string
@@ -9,6 +10,8 @@ export interface SharePayload {
   title: string
   xIntentUrl: string
 }
+
+export type ShareToXResult = 'shared_with_image' | 'intent_with_preview' | 'intent_with_download' | 'intent_only'
 
 function formatResultLabel(personality: PersonalityResult, lang: Lang): string {
   const enTitle = ARCHETYPES[personality.code].title
@@ -22,12 +25,23 @@ function formatResultLabel(personality: PersonalityResult, lang: Lang): string {
   return `My result is ${personality.code} (${titleShown})`
 }
 
+/** Static share page with OG/Twitter preview image (crawler-readable HTML). */
+export function sharePageUrl(
+  code: string,
+  lang: Lang,
+  origin = typeof window !== 'undefined' ? window.location.origin : '',
+): string {
+  const base = `${origin}${import.meta.env.BASE_URL}`.replace(/([^:]\/)\/+/g, '$1')
+  const root = base.endsWith('/') ? base : `${base}/`
+  return `${root}t/${code}/?lang=${lang}`
+}
+
 export function buildSharePayload(
   personality: PersonalityResult,
   lang: Lang,
   origin = typeof window !== 'undefined' ? window.location.origin : '',
 ): SharePayload {
-  const url = `${origin}/?type=${personality.code}&lang=${lang}`
+  const url = sharePageUrl(personality.code, lang, origin)
   const text = [
     t(lang, 'share.x.headline'),
     '',
@@ -50,7 +64,31 @@ export function buildSharePayload(
 }
 
 export function openShareToX(payload: SharePayload): void {
-  window.open(payload.xIntentUrl, '_blank', 'noopener,noreferrer')
+  // Keep this synchronous and inside the click gesture so popup blockers allow it.
+  const win = window.open(payload.xIntentUrl, '_blank')
+  if (win) {
+    try {
+      win.opener = null
+    } catch {
+      // ignore
+    }
+    return
+  }
+  // Popup blocked (or in-app browser): fall back to same-tab jump.
+  window.location.assign(payload.xIntentUrl)
+}
+
+/**
+ * Share to X. Opens the composer immediately (sync) so browsers don't block it.
+ * Link preview on the share URL carries the personality art.
+ */
+export function shareToXWithCard(
+  personality: PersonalityResult,
+  lang: Lang,
+): ShareToXResult {
+  const payload = buildSharePayload(personality, lang)
+  openShareToX(payload)
+  return 'intent_with_preview'
 }
 
 export async function shareOrCopy(payload: SharePayload): Promise<'shared' | 'copied'> {
@@ -64,4 +102,14 @@ export async function shareOrCopy(payload: SharePayload): Promise<'shared' | 'co
   }
   await navigator.clipboard.writeText(payload.text)
   return 'copied'
+}
+
+/** Optional helper if a caller still wants the PNG downloaded. */
+export async function downloadShareCard(
+  personality: PersonalityResult,
+  lang: Lang,
+): Promise<void> {
+  const blob = await renderSocialCardBlob(personality, lang)
+  if (!blob) return
+  triggerBlobDownload(blob, `wealth16-${personality.code}.png`)
 }

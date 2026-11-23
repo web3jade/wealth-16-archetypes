@@ -10,8 +10,64 @@ export const LANG_OPTIONS: { id: Lang; label: string }[] = [
 type Dict = Record<string, string>
 
 const en: Dict = {
-  'brand.title': '财富16型',
+  'brand.title': '16 Wealth Archetypes',
   'brand.subtitle': 'Grind with compounding — or coast on a lucky wind?',
+  'statutory.label.hk': 'MPF',
+  'statutory.label.sg': 'CPF',
+  'statutory.label.jp': 'Nenkin (lite)',
+  'statutory.label.kr': 'National Pension (lite)',
+  'statutory.label.tw': 'Labor Pension (lite)',
+  'statutory.label.my': 'EPF (lite)',
+  'statutory.label.in': 'EPF/NPS (lite)',
+  'statutory.label.cn': 'Social insurance (lite)',
+  'statutory.label.us': '401(k) / IRA (lite)',
+  'statutory.label.ca': 'RRSP / CPP (lite)',
+  'statutory.label.br': 'INSS (lite)',
+  'statutory.label.gb': 'Workplace pension (lite)',
+  'statutory.label.de': 'Rentenversicherung (lite)',
+  'statutory.label.fr': 'Retraite (lite)',
+  'statutory.label.ch': 'AHV / BVG (lite)',
+  'statutory.label.nl': 'Pension (lite)',
+  'statutory.label.au': 'Superannuation (lite)',
+  'statutory.label.nz': 'KiwiSaver (lite)',
+  'money.statutory.hint':
+    'Current balance in your main statutory or workplace retirement account. “(lite)” means a simplified educational model — real rules, caps, and payouts differ.',
+  'statutory.hint.hk':
+    'Current Mandatory Provident Fund balance. MPF here is a simplified educational stub (contribution rates/caps are illustrative only).',
+  'statutory.hint.sg':
+    'Current CPF balance relevant to retirement (OA/SA framing combined). CPF here is a simplified educational stub — allocation, interest, and withdrawal ages differ in reality.',
+  'statutory.hint.jp':
+    'Current Employees’ Pension / nenkin-related balance you want to model. This is a simplified educational stub — real Japanese pension formulas differ.',
+  'statutory.hint.kr':
+    'Current National Pension balance or credited value you want to include. Simplified educational stub only.',
+  'statutory.hint.tw':
+    'Current Labor Pension (劳退) balance. Simplified educational stub — local rules and employer schemes differ.',
+  'statutory.hint.my':
+    'Current EPF balance. Simplified educational stub — actual contribution and withdrawal rules differ.',
+  'statutory.hint.in':
+    'Current EPF and/or NPS balance. Combined simplified educational stub — real account rules differ.',
+  'statutory.hint.cn':
+    'Current urban employee pension / social-insurance individual account balance. “(简化)” is a simplified educational model — city bases, rates, and payout rules vary widely.',
+  'statutory.hint.us':
+    'Current 401(k) / IRA balance. Simplified educational stub — tax treatment and RMDs are not fully modeled.',
+  'statutory.hint.ca':
+    'Current RRSP and/or CPP-related savings you want to model. Simplified educational stub only.',
+  'statutory.hint.br':
+    'Current INSS-related balance or credited value for modelling. Simplified educational stub only.',
+  'statutory.hint.gb':
+    'Current workplace pension balance. Simplified educational stub — auto-enrolment and State Pension rules differ.',
+  'statutory.hint.de':
+    'Current statutory pension (Rentenversicherung) balance or credited points value for modelling. Simplified educational stub only.',
+  'statutory.hint.fr':
+    'Current retirement-scheme balance you want to model. Simplified educational stub — French regimes differ in reality.',
+  'statutory.hint.ch':
+    'Current AHV / BVG (pillar 1–2) balance for modelling. Simplified educational stub only.',
+  'statutory.hint.nl':
+    'Current workplace / occupational pension balance. Simplified educational stub only.',
+  'statutory.hint.au':
+    'Current Superannuation balance. Simplified educational stub — concessional caps and Age Pension rules differ.',
+  'statutory.hint.nz':
+    'Current KiwiSaver balance. Simplified educational stub only.',
   'step.locale': 'Locale',
   'step.life': 'Life stage',
   'step.money': 'Money',
@@ -20,10 +76,16 @@ const en: Dict = {
   'step.results': 'Results',
   'locale.title': 'Where do you live?',
   'locale.lede':
-    'Pick a country and city worldwide. Local currency, inflation, and retirement defaults will adjust automatically.',
+    'Pick where you live, then enter local inflation and the average return you can get on your assets.',
   'locale.market': 'Country / region',
   'locale.city': 'City',
   'locale.city.other': 'Other cities',
+  'locale.inflation': 'Local inflation (%)',
+  'locale.inflation.hint':
+    'Enter the approximate annual inflation rate where you live. If you are not sure, enter 0.',
+  'locale.return': 'Average asset return (%)',
+  'locale.return.hint':
+    'Enter the average annual return you can currently get on your assets.',
   'locale.region.asia': 'Asia',
   'locale.region.americas': 'Americas',
   'locale.region.europe': 'Europe',
@@ -67,10 +129,10 @@ const en: Dict = {
   'risk.balanced': 'Balanced',
   'risk.venture': 'Venture',
   'risk.real': '{label} · {pct}% real',
-  'results.title': 'Your Wealth 16 Type',
+  'results.title': 'Your 16 Wealth Archetype',
   'results.lede': 'A shareable personality reveal.',
   'results.letters': 'Your four letters',
-  'results.letters.lede': 'Each letter is one dimension of your Wealth 16 type.',
+  'results.letters.lede': 'Each letter is one dimension of your 16 Wealth Archetype.',
   'results.letters.horizon': 'Horizon',
   'results.letters.horizon.E': 'E — Early freedom: shorter runway, aim to leave work sooner.',
   'results.letters.horizon.L': 'L — Long runway: more years to compound toward a later target.',
@@ -96,14 +158,16 @@ const en: Dict = {
     'How much your projected nest egg exceeds the required amount — room above the ~4% spending plan.',
   'results.share': 'Share card',
   'results.shareX': 'Share to X',
-  'share.x.headline': 'Wealth 16 Archetypes: grind with compounding — or coast on a lucky wind?',
+  'share.x.headline': '16 Wealth Archetypes: grind with compounding — or coast on a lucky wind?',
   'share.x.result': 'My result is {code} ({enTitle} · {title})',
   'share.x.cta': 'Curious which wealth rhythm you are? Tap in and take the quiz.',
-  'results.shareAgent': 'Copy plan for AI',
+  'results.shareSite': 'Copy site link',
+  'results.shareAgent': 'Copy results for AI',
   'results.download': 'Download PNG',
-  'toast.agentCopied': 'Plan brief copied — paste into Grok / Claude / ChatGPT',
+  'toast.siteCopied': 'Site link copied',
+  'toast.agentCopied': 'Results copied — paste into Grok / Claude / ChatGPT',
   'agent.intro':
-    'You are a retirement planning assistant. Below is my personal summary from 财富16型 (educational, not advice). Please review carefully and help me refine a practical plan.',
+    'You are a retirement planning assistant. Below is my personal summary from 16 Wealth Archetypes (educational, not advice). Please review carefully and help me refine a practical plan.',
   'agent.ask':
     'Please: (1) sanity-check the assumptions, (2) suggest concrete monthly save / earn / spend adjustments, (3) propose a simple portfolio and rebalancing approach for my risk and horizon, (4) flag tax / statutory / local pitfalls I should verify with a licensed adviser, (5) give a 90-day action checklist.',
   'agent.section.profile': 'Personality type',
@@ -114,7 +178,6 @@ const en: Dict = {
   'agent.readiness': 'Readiness',
   'agent.yearsToRetire': 'Years to retire',
   'agent.saveDelta': 'Monthly save delta (+ need more / − can save less)',
-  'agent.earnDelta': 'Implied monthly earn delta (~35% of raise → savings)',
   'agent.breakEven': 'Break-even retire age under current habits',
   'agent.breakEven.none': 'not reachable in search range',
   'results.assumptions': 'Assumptions',
@@ -165,11 +228,13 @@ const en: Dict = {
   'results.tips.saveMore': 'To retire at {age} as planned, save about {amount} more each month.',
   'results.tips.saveLess': 'You are ahead — you could save about {amount} less each month and still stay on track for age {age}.',
   'results.tips.saveOk': 'Your monthly savings look roughly enough for retiring at {age}.',
-  'results.tips.earnMore': 'If ~35% of a raise is invested, that is roughly {amount} more monthly income.',
-  'results.tips.earnLess': 'If ~35% of income changes flow into savings, you could earn about {amount} less monthly and stay funded.',
   'results.tips.ageLater': 'Otherwise, a more realistic retirement age under current habits is about {age}.',
   'results.tips.ageEarlier': 'You may already be able to retire as early as about {age}.',
   'results.tips.ageNever': 'Under current savings, even delaying retirement may not close the gap — raise savings or lower retirement spend.',
+  'results.tips.alreadyFunded':
+    'By this model, your assets at age {age} already roughly cover retirement spending — you could retire now if you choose.',
+  'results.tips.alreadyFunded.plan':
+    'Your stated target of {target} is optional. No need to cut savings or push the retirement age backward just to “catch up.”',
   'results.portfolio': 'Suggested allocation',
   'results.portfolio.lede':
     'A simple educational mix based on your risk setting and years to retirement — not a personalized recommendation.',
@@ -184,6 +249,8 @@ const en: Dict = {
   'toast.shared': 'Shared!',
   'toast.copied': 'Copied to clipboard',
   'toast.downloaded': 'Card downloaded',
+  'toast.shareX.attach': 'Card image downloaded — attach it in the X composer before posting',
+  'toast.shareX.preview': 'Opening X — your type card will appear as the link preview',
   'lang.label': 'Language',
   'card.strength': 'Strength',
   'card.blindSpot': 'Blind spot',
@@ -210,6 +277,62 @@ const zh: Dict = {
   ...en,
   'brand.title': '财富16型',
   'brand.subtitle': '你是靠复利硬刚，还是靠顺风躺赢？',
+  'statutory.label.hk': '强积金',
+  'statutory.label.sg': '公积金 CPF',
+  'statutory.label.jp': '年金（简化）',
+  'statutory.label.kr': '国民年金（简化）',
+  'statutory.label.tw': '劳退（简化）',
+  'statutory.label.my': 'EPF（简化）',
+  'statutory.label.in': 'EPF/NPS（简化）',
+  'statutory.label.cn': '社保（简化）',
+  'statutory.label.us': '401(k) / IRA（简化）',
+  'statutory.label.ca': 'RRSP / CPP（简化）',
+  'statutory.label.br': 'INSS（简化）',
+  'statutory.label.gb': '职场养老金（简化）',
+  'statutory.label.de': '法定养老保险（简化）',
+  'statutory.label.fr': '退休金（简化）',
+  'statutory.label.ch': 'AHV / BVG（简化）',
+  'statutory.label.nl': '养老金（简化）',
+  'statutory.label.au': 'Super（简化）',
+  'statutory.label.nz': 'KiwiSaver（简化）',
+  'money.statutory.hint':
+    '你主要的法定或职场退休账户当前余额。「简化」表示教育用简化模型，真实缴费、上限与领取规则会有差异。',
+  'statutory.hint.hk':
+    '当前强积金（MPF）账户余额。此处为教育用简化模型，缴费比例与上限仅为示意。',
+  'statutory.hint.sg':
+    '与退休相关的公积金（CPF）余额（普通/特别账户合并示意）。此处为教育用简化模型，真实分配、利息与领取年龄不同。',
+  'statutory.hint.jp':
+    '你想纳入测算的厚生年金等相关余额。此处为教育用简化模型，真实日本年金公式不同。',
+  'statutory.hint.kr':
+    '你想纳入测算的国民年金余额或对应额度。仅供教育示意。',
+  'statutory.hint.tw':
+    '当前劳退账户余额。教育用简化模型，本地规则与雇主方案可能不同。',
+  'statutory.hint.my':
+    '当前 EPF 余额。教育用简化模型，真实缴费与提取规则不同。',
+  'statutory.hint.in':
+    '当前 EPF 和/或 NPS 余额。合并示意的教育用简化模型。',
+  'statutory.hint.cn':
+    '当前城镇职工养老保险 / 社保个人账户余额。「简化」表示教育用简化模型，各地缴费基数、比例与领取规则差异很大。',
+  'statutory.hint.us':
+    '当前 401(k) / IRA 余额。教育用简化模型，税务与强制提取等未完整建模。',
+  'statutory.hint.ca':
+    '你想纳入测算的 RRSP 和/或 CPP 相关储蓄。仅供教育示意。',
+  'statutory.hint.br':
+    '你想纳入测算的 INSS 相关余额。仅供教育示意。',
+  'statutory.hint.gb':
+    '当前职场养老金余额。教育用简化模型，自动加入与国家养老金规则不同。',
+  'statutory.hint.de':
+    '你想纳入测算的法定养老保险（Rentenversicherung）余额或积分对应值。仅供教育示意。',
+  'statutory.hint.fr':
+    '你想纳入测算的退休制度余额。教育用简化模型，法国各体制规则不同。',
+  'statutory.hint.ch':
+    '你想纳入测算的 AHV / BVG（第一、二支柱）余额。仅供教育示意。',
+  'statutory.hint.nl':
+    '当前职场/职业养老金余额。仅供教育示意。',
+  'statutory.hint.au':
+    '当前超级年金（Super）余额。教育用简化模型，优惠缴费上限与老龄津贴规则不同。',
+  'statutory.hint.nz':
+    '当前 KiwiSaver 余额。仅供教育示意。',
   'step.locale': '地区',
   'step.life': '人生阶段',
   'step.money': '财务',
@@ -217,10 +340,14 @@ const zh: Dict = {
   'step.risk': '风险',
   'step.results': '结果',
   'locale.title': '你住在哪里？',
-  'locale.lede': '可选择全球国家/地区和城市，货币、通胀与退休假设会自动调整。',
+  'locale.lede': '先选择生活地区，再填写当地通胀，以及你目前可得的资产平均回报率。',
   'locale.market': '国家 / 地区',
   'locale.city': '城市',
   'locale.city.other': '其他城市',
+  'locale.inflation': '所在地区通胀（%）',
+  'locale.inflation.hint': '填写你生活地区当前大致的年通胀率。不清楚就填 0。',
+  'locale.return': '资产平均回报率（%）',
+  'locale.return.hint': '填写你目前可得的资产平均年化回报率。',
   'locale.region.asia': '亚洲',
   'market.name.hk': '中国香港',
   'market.name.sg': '新加坡',
@@ -368,9 +495,11 @@ const zh: Dict = {
   'share.x.headline': '财富16型人格测试：你是靠复利硬刚，还是靠顺风躺赢？',
   'share.x.result': '我的结果是 {code}（{enTitle} · {title}）',
   'share.x.cta': '好奇你属于哪一种财富节奏？点进来测测看。',
-  'results.shareAgent': '复制给 AI 规划',
+  'results.shareSite': '复制网站链接',
+  'results.shareAgent': '复制结果给 AI',
   'results.download': '下载 PNG',
-  'toast.agentCopied': '规划摘要已复制 — 可粘贴给 Grok / Claude / ChatGPT',
+  'toast.siteCopied': '网站链接已复制',
+  'toast.agentCopied': '测试结果已复制 — 可粘贴给 Grok / Claude / ChatGPT',
   'agent.intro':
     '你是一位退休规划助手。以下是我在「财富16型」生成的个人摘要（仅供教育，非正式建议）。请仔细阅读，帮我做更细的规划。',
   'agent.ask':
@@ -383,7 +512,6 @@ const zh: Dict = {
   'agent.readiness': '进度状态',
   'agent.yearsToRetire': '距离退休年数',
   'agent.saveDelta': '每月储蓄差额（正数=需多存，负数=可少存）',
-  'agent.earnDelta': '换算收入差额（约 35% 加薪进储蓄）',
   'agent.breakEven': '按现有习惯的盈亏平衡退休年龄',
   'agent.breakEven.none': '在搜索范围内难以达标',
   'results.assumptions': '假设',
@@ -430,11 +558,13 @@ const zh: Dict = {
   'results.tips.saveMore': '若仍按现有条件在 {age} 岁退休，建议每月大约多存 {amount}。',
   'results.tips.saveLess': '你进度超前 — 每月大约可少存 {amount}，仍有机会按 {age} 岁退休达标。',
   'results.tips.saveOk': '按现有每月储蓄，大致能支撑 {age} 岁退休目标。',
-  'results.tips.earnMore': '换算成收入：若加薪中约 35% 用于储蓄，大约相当于每月多赚 {amount}。',
-  'results.tips.earnLess': '换算成收入：若收入变动中约 35% 进入储蓄，大约相当于每月可少赚 {amount} 仍能达标。',
   'results.tips.ageLater': '否则，按现有存钱与收入节奏，更现实的退休年龄大约是 {age} 岁。',
   'results.tips.ageEarlier': '按现有节奏，你最早大约可在 {age} 岁退休。',
   'results.tips.ageNever': '按现有储蓄节奏，即使推迟退休也可能难补缺口 — 需要提高储蓄或降低退休开支。',
+  'results.tips.alreadyFunded':
+    '按测算，你 {age} 岁现在的资产已大致够覆盖退休开支 — 若愿意，现在就可以退休。',
+  'results.tips.alreadyFunded.plan':
+    '目标 {target} 岁更多是生活安排上的选择；不必为了「达标」再建议你大幅少存，或把退休年龄倒推回去。',
   'results.portfolio': '建议理财组合',
   'results.portfolio.lede': '按你的风险偏好与距离退休年数给出的示意配置 — 非个性化投资建议。',
   'results.portfolio.return': '参考年化实际收益约 {pct}%',
@@ -448,6 +578,8 @@ const zh: Dict = {
   'toast.shared': '已分享！',
   'toast.copied': '已复制到剪贴板',
   'toast.downloaded': '卡片已下载',
+  'toast.shareX.attach': '人格卡已下载 — 请在发推时附上这张图片',
+  'toast.shareX.preview': '正在打开 X — 链接预览会显示你的人格卡',
   'lang.label': '语言',
   'card.strength': '优势',
   'card.blindSpot': '盲点',
@@ -469,8 +601,64 @@ const zh: Dict = {
 
 const ja: Dict = {
   ...en,
-  'brand.title': '财富16型',
+  'brand.title': 'ウェルス16型',
   'brand.subtitle': '複利で押し切る？それとも追い風で勝ち逃げ？',
+  'statutory.label.hk': 'MPF',
+  'statutory.label.sg': 'CPF',
+  'statutory.label.jp': '年金（簡易）',
+  'statutory.label.kr': '国民年金（簡易）',
+  'statutory.label.tw': '労退（簡易）',
+  'statutory.label.my': 'EPF（簡易）',
+  'statutory.label.in': 'EPF/NPS（簡易）',
+  'statutory.label.cn': '社会保険（簡易）',
+  'statutory.label.us': '401(k) / IRA（簡易）',
+  'statutory.label.ca': 'RRSP / CPP（簡易）',
+  'statutory.label.br': 'INSS（簡易）',
+  'statutory.label.gb': '職場年金（簡易）',
+  'statutory.label.de': '公的年金（簡易）',
+  'statutory.label.fr': '退職年金（簡易）',
+  'statutory.label.ch': 'AHV / BVG（簡易）',
+  'statutory.label.nl': '年金（簡易）',
+  'statutory.label.au': 'スーパー（簡易）',
+  'statutory.label.nz': 'KiwiSaver（簡易）',
+  'money.statutory.hint':
+    '主な公的・職場の退職口座の現在残高です。「簡易」は教育用の簡略モデルで、実際の拠出・上限・受給ルールは異なります。',
+  'statutory.hint.hk':
+    '現在のMPF残高です。教育用の簡略モデルで、拠出率や上限はあくまで目安です。',
+  'statutory.hint.sg':
+    '退職に関係するCPF残高（普通/特別口座をまとめたイメージ）です。教育用簡略モデルで、実際の配分・金利・引出年齢は異なります。',
+  'statutory.hint.jp':
+    '試算に含めたい厚生年金などの残高です。教育用簡略モデルで、実際の年金計算とは異なります。',
+  'statutory.hint.kr':
+    '試算に含めたい国民年金の残高または相当額です。教育用の目安です。',
+  'statutory.hint.tw':
+    '現在の労退口座残高です。教育用簡略モデルで、現地ルールは異なります。',
+  'statutory.hint.my':
+    '現在のEPF残高です。教育用簡略モデルです。',
+  'statutory.hint.in':
+    '現在のEPFおよび/またはNPS残高です。まとめた教育用簡略モデルです。',
+  'statutory.hint.cn':
+    '都市職工年金 / 社会保険の個人口座残高です。「簡易」は教育用簡略モデルで、都市ごとの基数・料率・受給ルールは大きく異なります。',
+  'statutory.hint.us':
+    '現在の401(k)/IRA残高です。教育用簡略モデルで、税制や引出ルールは十分に再現していません。',
+  'statutory.hint.ca':
+    '試算に含めたいRRSPおよび/またはCPP関連貯蓄です。教育用の目安です。',
+  'statutory.hint.br':
+    '試算に含めたいINSS関連残高です。教育用の目安です。',
+  'statutory.hint.gb':
+    '現在の職場年金残高です。教育用簡略モデルで、自動加入や国家年金とは異なります。',
+  'statutory.hint.de':
+    '試算に含めたい公的年金（Rentenversicherung）残高またはポイント相当です。教育用の目安です。',
+  'statutory.hint.fr':
+    '試算に含めたい退職制度の残高です。教育用簡略モデルで、実際の制度は異なります。',
+  'statutory.hint.ch':
+    '試算に含めたいAHV/BVG（第1・2柱）残高です。教育用の目安です。',
+  'statutory.hint.nl':
+    '現在の職場・職域年金残高です。教育用の目安です。',
+  'statutory.hint.au':
+    '現在のスーパー残高です。教育用簡略モデルで、優遇拠出上限などは異なります。',
+  'statutory.hint.nz':
+    '現在のKiwiSaver残高です。教育用の目安です。',
   'step.locale': '地域',
   'step.life': 'ライフステージ',
   'step.money': 'お金',
@@ -478,10 +666,14 @@ const ja: Dict = {
   'step.risk': 'リスク',
   'step.results': '結果',
   'locale.title': 'お住まいの地域は？',
-  'locale.lede': '世界中の国・地域と都市を選べます。通貨・インフレ・退職前提が自動で調整されます。',
+  'locale.lede': 'まずお住まいの地域を選び、現地のインフレと、いま得られる資産の平均リターンを入力してください。',
   'locale.market': '国 / 地域',
   'locale.city': '都市',
   'locale.city.other': 'その他の都市',
+  'locale.inflation': '現地のインフレ（%）',
+  'locale.inflation.hint': 'お住まいの地域のおおよその年間インフレ率を入力。わからない場合は 0。',
+  'locale.return': '資産の平均リターン（%）',
+  'locale.return.hint': 'いま得られる資産の平均年間リターンを入力してください。',
   'locale.region.asia': 'アジア',
   'market.name.hk': '香港',
   'market.name.sg': 'シンガポール',
@@ -597,10 +789,10 @@ const ja: Dict = {
   'risk.balanced': 'バランス',
   'risk.venture': '積極',
   'risk.real': '{label} · 実質 {pct}%',
-  'results.title': 'あなたの财富16型',
+  'results.title': 'あなたのウェルス16型',
   'results.lede': 'シェア用の性格カード。',
   'results.letters': '4文字の意味',
-  'results.letters.lede': '各文字は财富16型の1つの軸。ハイライトがあなたの組み合わせです。',
+  'results.letters.lede': '各文字はウェルス16型の1つの軸。ハイライトがあなたの組み合わせです。',
   'results.letters.horizon': '時間軸',
   'results.letters.horizon.E': 'E — 早めの自由：短い滑走路で早く仕事を離れる志向。',
   'results.letters.horizon.L': 'L — 長い滑走路：複利で目標に近づく時間がある。',
@@ -618,11 +810,13 @@ const ja: Dict = {
   'results.extra': '追加で毎月貯蓄',
   'results.surplus': '余剰',
   'results.share': 'カードを共有',
-  'results.shareAgent': 'AI向けにコピー',
+  'results.shareSite': 'サイトリンクをコピー',
+  'results.shareAgent': '結果をAI向けにコピー',
   'results.download': 'PNGを保存',
-  'toast.agentCopied': '要約をコピーしました — Grok / Claude / ChatGPT に貼り付けてください',
+  'toast.siteCopied': 'サイトリンクをコピーしました',
+  'toast.agentCopied': 'テスト結果をコピーしました — Grok / Claude / ChatGPT に貼り付けてください',
   'agent.intro':
-    'あなたは退職プランのアシスタントです。以下は「财富16型」の個人要約です（教育用であり助言ではありません）。よく読み、より細かい計画を手伝ってください。',
+    'あなたは退職プランのアシスタントです。以下は「ウェルス16型」の個人要約です（教育用であり助言ではありません）。よく読み、より細かい計画を手伝ってください。',
   'agent.ask':
     'お願い：（1）前提の妥当性チェック、（2）毎月の貯蓄/収入/支出の具体案、（3）リスクと時間軸に合う簡易配分とリバランス、（4）税・法定口座・現地ルールで専門家確認が必要な点、（5）90日アクションリスト。',
   'agent.section.profile': '性格タイプ',
@@ -633,7 +827,6 @@ const ja: Dict = {
   'agent.readiness': '進捗',
   'agent.yearsToRetire': '引退までの年数',
   'agent.saveDelta': '毎月の貯蓄差分（正=もっと貯める必要）',
-  'agent.earnDelta': '収入換算の差分（昇給の約35%を貯蓄）',
   'agent.breakEven': 'いまの習慣での損益分岐引退年齢',
   'agent.breakEven.none': '探索範囲内では到達困難',
   'results.assumptions': '前提条件',
@@ -659,7 +852,7 @@ const ja: Dict = {
   'market.disclaimer.generic-asia': '汎用アジアの代替モデル（USD）。投資助言ではありません。',
   'results.restart': '最初から',
   'results.shareX': 'Xでシェア',
-  'share.x.headline': '财富16型性格テスト：複利で押し切る？それとも追い風で勝ち逃げ？',
+  'share.x.headline': 'ウェルス16型性格テスト：複利で押し切る？それとも追い風で勝ち逃げ？',
   'share.x.result': '私の結果は {code}（{enTitle} · {title}）',
   'share.x.cta': 'あなたはどの財富リズム？タップして診断してみて。',
   'results.tips': 'アクションのヒント',
@@ -667,11 +860,13 @@ const ja: Dict = {
   'results.tips.saveMore': '{age}歳で引退するなら、毎月およそ {amount} 多く貯める必要があります。',
   'results.tips.saveLess': '前倒しです — 毎月およそ {amount} 少なくしても {age}歳目標を維持できる可能性があります。',
   'results.tips.saveOk': 'いまの貯蓄ペースなら、おおよそ {age}歳引退に足りそうです。',
-  'results.tips.earnMore': '昇給の約35%を貯蓄に回すなら、月収がおよそ {amount} 増えるイメージです。',
-  'results.tips.earnLess': '収入変動の約35%が貯蓄に入るなら、月収がおよそ {amount} 減っても足りるイメージです。',
   'results.tips.ageLater': 'そうでなければ、いまの習慣だと現実的な引退年齢はおよそ {age}歳です。',
   'results.tips.ageEarlier': 'いまのペースなら、早くておよそ {age}歳で引退できる可能性があります。',
   'results.tips.ageNever': 'いまの貯蓄では引退を遅らせても足りない可能性があります。貯蓄を増やすか支出を下げてください。',
+  'results.tips.alreadyFunded':
+    '試算では、{age}歳のいまの資産でおおよそ引退後の支出を賄えます — 望むなら今すぐ引退できる水準です。',
+  'results.tips.alreadyFunded.plan':
+    '目標の {target}歳は生活設計の選択です。無理に貯蓄を大幅減らしたり、引退年齢を引き戻したりする必要はありません。',
   'results.portfolio': '配分の目安',
   'results.portfolio.lede': 'リスク許容度と引退までの年数に基づく教育的な配分です。',
   'results.portfolio.return': '参考の実質年率リターン ≈ {pct}%',
@@ -690,6 +885,8 @@ const ja: Dict = {
   'toast.shared': '共有しました！',
   'toast.copied': 'クリップボードにコピーしました',
   'toast.downloaded': 'カードを保存しました',
+  'toast.shareX.attach': 'カード画像を保存しました — Xの投稿画面で画像を添付してください',
+  'toast.shareX.preview': 'Xを開いています — リンク先プレビューにカードが表示されます',
   'lang.label': '言語',
   'card.strength': '強み',
   'card.blindSpot': '盲点',
@@ -711,8 +908,64 @@ const ja: Dict = {
 
 const ko: Dict = {
   ...en,
-  'brand.title': '财富16型',
+  'brand.title': '웰스16형',
   'brand.subtitle': '복리로 밀어붙일 건가, 순풍에 올라탈 건가?',
+  'statutory.label.hk': 'MPF',
+  'statutory.label.sg': 'CPF',
+  'statutory.label.jp': '연금(간소화)',
+  'statutory.label.kr': '국민연금(간소화)',
+  'statutory.label.tw': '노퇴(간소화)',
+  'statutory.label.my': 'EPF(간소화)',
+  'statutory.label.in': 'EPF/NPS(간소화)',
+  'statutory.label.cn': '사회보험(간소화)',
+  'statutory.label.us': '401(k) / IRA(간소화)',
+  'statutory.label.ca': 'RRSP / CPP(간소화)',
+  'statutory.label.br': 'INSS(간소화)',
+  'statutory.label.gb': '직장연금(간소화)',
+  'statutory.label.de': '공적연금(간소화)',
+  'statutory.label.fr': '퇴직연금(간소화)',
+  'statutory.label.ch': 'AHV / BVG(간소화)',
+  'statutory.label.nl': '연금(간소화)',
+  'statutory.label.au': '슈퍼(간소화)',
+  'statutory.label.nz': 'KiwiSaver(간소화)',
+  'money.statutory.hint':
+    '주요 법정·직장 퇴직 계좌의 현재 잔액입니다. 「간소화」는 교육용 단순 모델이며, 실제 납부·한도·수급 규칙은 다릅니다.',
+  'statutory.hint.hk':
+    '현재 MPF 잔액입니다. 교육용 단순 모델이며 납부 비율·한도는 참고용입니다.',
+  'statutory.hint.sg':
+    '은퇴와 관련된 CPF 잔액(보통/특별 계좌를 합친 이미지)입니다. 교육용 단순 모델이며 실제 배분·이자·인출 나이는 다릅니다.',
+  'statutory.hint.jp':
+    '계산에 넣고 싶은 후생연금 등 잔액입니다. 교육용 단순 모델이며 실제 일본 연금 산식과 다릅니다.',
+  'statutory.hint.kr':
+    '계산에 넣고 싶은 국민연금 잔액 또는 해당 금액입니다. 교육용 참고입니다.',
+  'statutory.hint.tw':
+    '현재 노퇴 계좌 잔액입니다. 교육용 단순 모델이며 현지 규칙은 다를 수 있습니다.',
+  'statutory.hint.my':
+    '현재 EPF 잔액입니다. 교육용 단순 모델입니다.',
+  'statutory.hint.in':
+    '현재 EPF 및/또는 NPS 잔액입니다. 합친 교육용 단순 모델입니다.',
+  'statutory.hint.cn':
+    '도시 근로자 연금 / 사회보험 개인 계좌 잔액입니다. 「간소화」는 교육용 단순 모델이며, 도시별 기준·요율·수급 규칙은 크게 다릅니다.',
+  'statutory.hint.us':
+    '현재 401(k)/IRA 잔액입니다. 교육용 단순 모델이며 세금·인출 규칙은 충분히 반영되지 않습니다.',
+  'statutory.hint.ca':
+    '계산에 넣고 싶은 RRSP 및/또는 CPP 관련 저축입니다. 교육용 참고입니다.',
+  'statutory.hint.br':
+    '계산에 넣고 싶은 INSS 관련 잔액입니다. 교육용 참고입니다.',
+  'statutory.hint.gb':
+    '현재 직장연금 잔액입니다. 교육용 단순 모델이며 자동가입·국가연금 규칙은 다릅니다.',
+  'statutory.hint.de':
+    '계산에 넣고 싶은 공적연금(Rentenversicherung) 잔액 또는 포인트 상당액입니다. 교육용 참고입니다.',
+  'statutory.hint.fr':
+    '계산에 넣고 싶은 퇴직제도 잔액입니다. 교육용 단순 모델이며 실제 제도는 다릅니다.',
+  'statutory.hint.ch':
+    '계산에 넣고 싶은 AHV/BVG(1·2기둥) 잔액입니다. 교육용 참고입니다.',
+  'statutory.hint.nl':
+    '현재 직장·직역 연금 잔액입니다. 교육용 참고입니다.',
+  'statutory.hint.au':
+    '현재 슈퍼 잔액입니다. 교육용 단순 모델이며 우대 납부 한도 등은 다릅니다.',
+  'statutory.hint.nz':
+    '현재 KiwiSaver 잔액입니다. 교육용 참고입니다.',
   'step.locale': '지역',
   'step.life': '생애 단계',
   'step.money': '자산',
@@ -720,10 +973,14 @@ const ko: Dict = {
   'step.risk': '위험',
   'step.results': '결과',
   'locale.title': '어디에 사시나요?',
-  'locale.lede': '전 세계 국가/지역과 도시를 고를 수 있습니다. 통화·물가·은퇴 가정이 자동 조정됩니다.',
+  'locale.lede': '먼저 거주 지역을 고른 뒤, 현지 물가 상승률과 현재 얻을 수 있는 자산 평균 수익률을 입력하세요.',
   'locale.market': '국가 / 지역',
   'locale.city': '도시',
   'locale.city.other': '기타 도시',
+  'locale.inflation': '거주 지역 물가 상승률(%)',
+  'locale.inflation.hint': '거주 지역의 대략적인 연간 물가 상승률을 입력하세요. 잘 모르면 0을 입력하세요.',
+  'locale.return': '자산 평균 수익률(%)',
+  'locale.return.hint': '현재 얻을 수 있는 자산의 평균 연간 수익률을 입력하세요.',
   'locale.region.asia': '아시아',
   'market.name.hk': '홍콩',
   'market.name.sg': '싱가포르',
@@ -839,10 +1096,10 @@ const ko: Dict = {
   'risk.balanced': '균형',
   'risk.venture': '성장',
   'risk.real': '{label} · 실질 {pct}%',
-  'results.title': '나의 财富16型',
+  'results.title': '나의 웰스16형',
   'results.lede': '공유용 성격 카드.',
   'results.letters': '네 글자의 의미',
-  'results.letters.lede': '각 글자는 财富16型의 한 축입니다. 하이라이트가 당신의 조합입니다.',
+  'results.letters.lede': '각 글자는 웰스16형의 한 축입니다. 하이라이트가 당신의 조합입니다.',
   'results.letters.horizon': '시간축',
   'results.letters.horizon.E': 'E — 이른 자유: 짧은 활주로, 더 일찍 일을 떠나려는 성향.',
   'results.letters.horizon.L': 'L — 긴 활주로: 복리로 목표에 다가갈 시간이 더 있음.',
@@ -860,11 +1117,13 @@ const ko: Dict = {
   'results.extra': '월 추가 저축',
   'results.surplus': '잉여',
   'results.share': '카드 공유',
-  'results.shareAgent': 'AI용으로 복사',
+  'results.shareSite': '사이트 링크 복사',
+  'results.shareAgent': '결과를 AI용으로 복사',
   'results.download': 'PNG 저장',
-  'toast.agentCopied': '요약이 복사됨 — Grok / Claude / ChatGPT에 붙여넣으세요',
+  'toast.siteCopied': '사이트 링크가 복사됨',
+  'toast.agentCopied': '테스트 결과가 복사됨 — Grok / Claude / ChatGPT에 붙여넣으세요',
   'agent.intro':
-    '당신은 은퇴 계획 도우미입니다. 아래는 「财富16型」 개인 요약입니다(교육용, 조언 아님). 꼼꼼히 읽고 더 세밀한 계획을 도와주세요.',
+    '당신은 은퇴 계획 도우미입니다. 아래는 「웰스16형」 개인 요약입니다(교육용, 조언 아님). 꼼꼼히 읽고 더 세밀한 계획을 도와주세요.',
   'agent.ask':
     '요청: (1) 가정 타당성 점검, (2) 월 저축/소득/지출 실행안, (3) 위험·시간축에 맞는 단순 배분과 리밸런싱, (4) 세금·법정계좌·현지 규칙 중 전문가 확인 포인트, (5) 90일 액션 리스트.',
   'agent.section.profile': '성격 유형',
@@ -875,7 +1134,6 @@ const ko: Dict = {
   'agent.readiness': '진행 상태',
   'agent.yearsToRetire': '은퇴까지 연수',
   'agent.saveDelta': '월 저축 차이(+면 더 저축 필요)',
-  'agent.earnDelta': '소득 환산 차이(인상분의 약 35% 저축)',
   'agent.breakEven': '현재 습관 기준 손익분기 은퇴 나이',
   'agent.breakEven.none': '탐색 범위 내 도달 어려움',
   'results.assumptions': '가정',
@@ -901,7 +1159,7 @@ const ko: Dict = {
   'market.disclaimer.generic-asia': '일반 아시아 대체 모델(USD). 금융 조언이 아닙니다.',
   'results.restart': '다시 시작',
   'results.shareX': 'X에 공유',
-  'share.x.headline': '财富16型 성격 테스트: 복리로 밀어붙일 건가, 순풍에 올라탈 건가?',
+  'share.x.headline': '웰스16형 성격 테스트: 복리로 밀어붙일 건가, 순풍에 올라탈 건가?',
   'share.x.result': '내 결과는 {code}（{enTitle} · {title}）',
   'share.x.cta': '당신은 어떤 부의 리듬일까? 눌러서 테스트해 보세요.',
   'results.tips': '실행 팁',
@@ -909,11 +1167,13 @@ const ko: Dict = {
   'results.tips.saveMore': '{age}세에 은퇴하려면 매월 약 {amount} 더 저축하세요.',
   'results.tips.saveLess': '여유가 있습니다 — 매월 약 {amount} 덜 저축해도 {age}세 목표를 유지할 수 있습니다.',
   'results.tips.saveOk': '현재 저축 속도면 대략 {age}세 은퇴에 충분해 보입니다.',
-  'results.tips.earnMore': '인상분의 약 35%를 저축한다면, 월 소득이 약 {amount} 늘어나는 셈입니다.',
-  'results.tips.earnLess': '소득 변동의 약 35%가 저축된다면, 월 소득이 약 {amount} 줄어도 가능할 수 있습니다.',
   'results.tips.ageLater': '그렇지 않다면, 현재 습관 기준 현실적인 은퇴 나이는 약 {age}세입니다.',
   'results.tips.ageEarlier': '현재 속도라면 빠르면 약 {age}세에 은퇴할 수 있습니다.',
   'results.tips.ageNever': '현재 저축으로는 은퇴를 미뤄도 부족할 수 있습니다. 저축을 늘리거나 지출을 낮추세요.',
+  'results.tips.alreadyFunded':
+    '계산상 {age}세인 지금 자산으로도 은퇴 후 지출을 대략 감당할 수 있습니다 — 원한다면 지금 은퇴해도 되는 수준입니다.',
+  'results.tips.alreadyFunded.plan':
+    '목표 {target}세는 생활 설계상의 선택입니다. 맞추려고 저축을 크게 줄이거나 은퇴 나이를 뒤로 당길 필요는 없습니다.',
   'results.portfolio': '제안 자산배분',
   'results.portfolio.lede': '위험 성향과 은퇴까지 연수 기준의 교육용 배분입니다.',
   'results.portfolio.return': '참고 실질 연환산 수익률 ≈ {pct}%',
@@ -932,6 +1192,8 @@ const ko: Dict = {
   'toast.shared': '공유됨!',
   'toast.copied': '클립보드에 복사됨',
   'toast.downloaded': '카드 저장됨',
+  'toast.shareX.attach': '카드 이미지가 저장됨 — X 작성 화면에서 이미지를 첨부하세요',
+  'toast.shareX.preview': 'X 여는 중 — 링크 미리보기에 카드가 표시됩니다',
   'lang.label': '언어',
   'card.strength': '강점',
   'card.blindSpot': '약점',

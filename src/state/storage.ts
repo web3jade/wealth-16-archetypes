@@ -39,21 +39,52 @@ export function saveLangPreference(lang: Lang): void {
   localStorage.setItem(LANG_KEY, lang)
 }
 
+/** Blank numeric fields — NumberInput renders these as empty. */
+const blank = Number.NaN
+
+/** Fresh quiz defaults: selects only; all fillable numbers start empty. */
 export const defaultInput = (): WizardInput => ({
   marketId: 'hk',
   cityId: 'hong-kong',
   lifeStage: 'mid_career',
-  currentAge: 32,
-  retireAge: 60,
-  annualSalary: 480_000,
-  monthlySpend: 22_000,
-  currentSavings: 250_000,
-  statutoryBalance: 120_000,
-  monthlySavings: 6_000,
+  currentAge: blank,
+  retireAge: blank,
+  annualSalary: blank,
+  monthlySpend: blank,
+  currentSavings: blank,
+  statutoryBalance: blank,
+  monthlySavings: blank,
   riskBand: 'balanced',
   lifestyleGoal: 'same',
-  oneOffGoals: 0,
+  oneOffGoals: blank,
 })
+
+/** Coerce blank (NaN) fields to finite numbers for the projection engine. */
+export function normalizeInput(input: WizardInput): WizardInput {
+  const n = (v: number, fallback = 0) => (Number.isFinite(v) ? v : fallback)
+  return {
+    ...input,
+    currentAge: n(input.currentAge),
+    retireAge: n(input.retireAge),
+    annualSalary: n(input.annualSalary),
+    monthlySpend: n(input.monthlySpend),
+    currentSavings: n(input.currentSavings),
+    statutoryBalance: n(input.statutoryBalance),
+    monthlySavings: n(input.monthlySavings),
+    oneOffGoals: n(input.oneOffGoals),
+  }
+}
+
+/** Required money fields (one-off goals stay optional). */
+export function moneyFieldsReady(input: WizardInput): boolean {
+  return [
+    input.annualSalary,
+    input.monthlySpend,
+    input.currentSavings,
+    input.statutoryBalance,
+    input.monthlySavings,
+  ].every(Number.isFinite)
+}
 
 export function loadState(): PersistedState | null {
   try {

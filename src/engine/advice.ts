@@ -18,10 +18,10 @@ const SLICE_REAL_RETURN: Record<PortfolioSlice['key'], number> = {
 export interface PlanAdvice {
   /** Positive = need to save more each month; negative = can save less and still be on track */
   monthlySaveDelta: number
-  /** Rough income change if ~35% of extra/less income goes to savings */
-  monthlyEarnDelta: number
   /** Earliest age where nest egg meets required (null if never within search range) */
   breakEvenRetireAge: number | null
+  /** True when current assets already cover the required nest egg if retiring now */
+  alreadyFundedNow: boolean
   portfolio: {
     slices: PortfolioSlice[]
     riskBand: RiskBand
@@ -35,8 +35,6 @@ export function portfolioExpectedRealReturn(slices: PortfolioSlice[]): number {
   const weighted = slices.reduce((sum, s) => sum + (s.pct / 100) * SLICE_REAL_RETURN[s.key], 0)
   return Math.round(weighted * 1000) / 1000
 }
-
-const SAVE_FROM_RAISE = 0.35
 
 function projectAtAge(
   input: WizardInput,
@@ -52,10 +50,11 @@ export function findBreakEvenRetireAge(
   market: MarketPack,
   overrides: AssumptionOverrides = {},
 ): number | null {
+  const startAge = Math.max(0, Math.ceil(input.currentAge))
   const maxAge = Math.min(market.lifeExpectancy - 5, 85)
 
-  // Prefer earliest feasible age at or after current age
-  for (let age = input.currentAge; age <= maxAge; age += 1) {
+  // Never suggest retiring before the user's current age.
+  for (let age = startAge; age <= maxAge; age += 1) {
     const result = projectAtAge(input, market, age, overrides)
     if (result.gap <= 0) return age
   }
@@ -151,23 +150,27 @@ export function buildPlanAdvice(
   projection: ProjectionResult,
   overrides: AssumptionOverrides = {},
 ): PlanAdvice {
+  const breakEvenRetireAge = findBreakEvenRetireAge(input, market, overrides)
+  const alreadyFundedNow =
+    breakEvenRetireAge != null && breakEvenRetireAge <= Math.ceil(input.currentAge)
+
   let monthlySaveDelta = 0
-  if (projection.gap > 0) {
+  if (alreadyFundedNow) {
+    // Already independent on today's assets — don't push "save much less" / reverse the plan.
+    monthlySaveDelta = 0
+  } else if (projection.gap > 0) {
     monthlySaveDelta = projection.extraMonthlySavingsNeeded
   } else if (projection.surplus > 0) {
     const minSave = maxMonthlySaveWhileFunded(input, market, overrides)
     monthlySaveDelta = minSave - input.monthlySavings // typically negative
   }
 
-  const monthlyEarnDelta = monthlySaveDelta / SAVE_FROM_RAISE
-  const breakEvenRetireAge = findBreakEvenRetireAge(input, market, overrides)
-
   const slices = suggestPortfolio(input.riskBand, projection.yearsToRetire)
 
   return {
     monthlySaveDelta,
-    monthlyEarnDelta,
     breakEvenRetireAge,
+    alreadyFundedNow,
     portfolio: {
       slices,
       riskBand: input.riskBand,

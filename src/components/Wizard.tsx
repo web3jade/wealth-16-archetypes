@@ -1,4 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  trackShare,
+  trackTypeRevealed,
+  trackWizardStep,
+} from '../analytics'
 import { buildPlanAdvice } from '../engine/advice'
 import {
   agesAreValid,
@@ -16,15 +21,21 @@ import type {
   WizardInput,
 } from '../engine/types'
 import { marketDisclaimer, t, type Lang } from '../i18n/messages'
-import { cityLabel, marketLabel } from '../i18n/places'
+import { cityLabel, marketLabel, statutoryHint, statutoryLabel } from '../i18n/places'
 import { citiesForSelect, getMarket, isOtherCity, marketsGroupedByRegion } from '../markets'
 import { classifyPersonality } from '../personality/classify'
 import { buildAgentBrief, copyAgentBrief } from '../share/buildAgentBrief'
-import { buildSharePayload, openShareToX } from '../share/buildSharePayload'
+import { shareToXWithCard } from '../share/buildSharePayload'
 import { downloadSocialCardPng } from '../share/downloadCard'
-import { clearState, defaultInput, loadState, saveState } from '../state/storage'
+import {
+  clearState,
+  defaultInput,
+  moneyFieldsReady,
+  normalizeInput,
+} from '../state/storage'
 import { HintLabel } from './HintLabel'
 import { LanguageSelect } from './LanguageSelect'
+import { NumberInput } from './NumberInput'
 import { SocialCard } from './SocialCard'
 
 interface WizardProps {
@@ -62,14 +73,11 @@ const RISK_KEYS: { id: RiskBand; key: string }[] = [
 ]
 
 export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = {}) {
-  const saved = loadState()
-  const urlLang = new URLSearchParams(window.location.search).get('lang') as Lang | null
-  const bootLang: Lang =
-    initialLang ??
-    (urlLang && ['en', 'zh', 'ja', 'ko'].includes(urlLang) ? urlLang : (saved?.lang ?? 'zh'))
-  const [step, setStep] = useState(saved?.step ?? 0)
-  const [input, setInput] = useState<WizardInput>(saved?.input ?? defaultInput())
-  const [assumptions, setAssumptions] = useState<AssumptionOverrides>(saved?.assumptions ?? {})
+  // Always start a fresh quiz when Wizard mounts (App clears storage before opening).
+  const bootLang: Lang = initialLang ?? 'zh'
+  const [step, setStep] = useState(0)
+  const [input, setInput] = useState<WizardInput>(() => defaultInput())
+  const [assumptions, setAssumptions] = useState<AssumptionOverrides>({})
   const [lang, setLang] = useState<Lang>(bootLang)
   const [toast, setToast] = useState<string | null>(null)
 
@@ -80,10 +88,13 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
 
   const marketGroups = marketsGroupedByRegion()
   const market = getMarket(input.marketId) ?? marketGroups[0]?.markets[0]!
-
-  useEffect(() => {
-    saveState({ step, input, assumptions, lang })
-  }, [step, input, assumptions, lang])
+  const normalized = useMemo(() => normalizeInput(input), [input])
+  const moneyOk = moneyFieldsReady(input)
+  const assumptionsOk =
+    assumptions.inflation !== undefined
+    && Number.isFinite(assumptions.inflation)
+    && assumptions.realReturn !== undefined
+    && Number.isFinite(assumptions.realReturn)
 
   useEffect(() => {
     if (!market.cities.some((c) => c.id === input.cityId)) {
@@ -92,22 +103,35 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
   }, [market, input.cityId])
 
   const projection = useMemo(
-    () => projectRetirement(input, market, assumptions),
-    [input, market, assumptions],
+    () => projectRetirement(normalized, market, assumptions),
+    [normalized, market, assumptions],
   )
   const personality = useMemo(
-    () => classifyPersonality(input, market, projection, lang),
-    [input, market, projection, lang],
+    () => classifyPersonality(normalized, market, projection, lang),
+    [normalized, market, projection, lang],
   )
   const advice = useMemo(
-    () => buildPlanAdvice(input, market, projection, assumptions),
-    [input, market, projection, assumptions],
+    () => buildPlanAdvice(normalized, market, projection, assumptions),
+    [normalized, market, projection, assumptions],
   )
 
   useEffect(() => {
     document.title = `${t(lang, 'brand.title')} — ${t(lang, 'brand.subtitle')}`
     document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : lang
   }, [lang])
+
+  useEffect(() => {
+    trackWizardStep(step, STEP_KEYS[step], lang)
+  }, [step, lang])
+
+  const revealedKey = useRef<string | null>(null)
+  useEffect(() => {
+    if (step !== STEP_KEYS.length - 1) return
+    const key = `${personality.code}:${input.marketId}:${input.cityId}:${lang}`
+    if (revealedKey.current === key) return
+    revealedKey.current = key
+    trackTypeRevealed(lang, normalized, personality)
+  }, [step, lang, normalized, personality])
 
   const patch = (partial: Partial<WizardInput>) => setInput((prev) => ({ ...prev, ...partial }))
 
@@ -117,33 +141,71 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
   )
   const agesOk = ageErrors.length === 0
 
-  const next = () => {
-    if (step === 1 && !agesAreValid(input.currentAge, input.retireAge)) return
-    setStep((s) => Math.min(s + 1, STEP_KEYS.length - 1))
+  const goToStep = (s: number) => {
+    setStep(s)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
-  const back = () => setStep((s) => Math.max(s - 1, 0))
+
+  const next = () => {
+    if (step === 0 && !assumptionsOk) return
+    if (step === 1 && !agesAreValid(input.currentAge, input.retireAge)) return
+    if (step === 2 && !moneyFieldsReady(input)) return
+    goToStep(Math.min(step + 1, STEP_KEYS.length - 1))
+  }
+
+  const setAssumptionPct = (key: 'inflation' | 'realReturn', pct: number) => {
+    setAssumptions((prev) => {
+      if (!Number.isFinite(pct)) {
+        const next = { ...prev }
+        delete next[key]
+        return next
+      }
+      return { ...prev, [key]: pct / 100 }
+    })
+  }
+  const back = () => goToStep(Math.max(step - 1, 0))
 
   const onShareX = () => {
-    const payload = buildSharePayload(personality, lang)
-    openShareToX(payload)
+    // Must stay sync in the click handler — awaiting before window.open gets blocked.
+    const result = shareToXWithCard(personality, lang)
+    trackShare('x', lang, personality.code)
+    if (result === 'intent_with_preview') {
+      setToast(t(lang, 'toast.shareX.preview'))
+    } else if (result === 'intent_with_download') {
+      setToast(t(lang, 'toast.shareX.attach'))
+    } else {
+      setToast(t(lang, 'toast.shared'))
+    }
+    setTimeout(() => setToast(null), 2800)
+  }
+
+  const onCopySiteLink = async () => {
+    const base = `${window.location.origin}${import.meta.env.BASE_URL}`.replace(/([^:]\/)\/+/g, '$1')
+    const url = base.endsWith('/') ? base : `${base}/`
+    await navigator.clipboard.writeText(url)
+    trackShare('site_copy', lang, personality.code)
+    setToast(t(lang, 'toast.siteCopied'))
+    setTimeout(() => setToast(null), 2200)
   }
 
   const onCopyForAgent = async () => {
     const brief = buildAgentBrief({
       lang,
-      input,
+      input: normalized,
       market,
       projection,
       advice,
       personality,
     })
     await copyAgentBrief(brief)
+    trackShare('agent_copy', lang, personality.code)
     setToast(t(lang, 'toast.agentCopied'))
     setTimeout(() => setToast(null), 2200)
   }
 
   const onDownload = async () => {
     await downloadSocialCardPng(personality, lang)
+    trackShare('download_png', lang, personality.code)
     setToast(t(lang, 'toast.downloaded'))
     setTimeout(() => setToast(null), 1800)
   }
@@ -163,12 +225,14 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
           <p className="brand-sub">{t(lang, 'brand.subtitle')}</p>
         </div>
         <div className="topbar-right">
-          {onBackHome && (
-            <button type="button" className="btn ghost compact" onClick={onBackHome}>
-              {t(lang, 'nav.home')}
-            </button>
-          )}
-          <LanguageSelect lang={lang} onChange={setLanguage} />
+          <div className="topbar-actions">
+            {onBackHome && (
+              <button type="button" className="btn ghost compact" onClick={onBackHome}>
+                {t(lang, 'nav.home')}
+              </button>
+            )}
+            <LanguageSelect lang={lang} onChange={setLanguage} />
+          </div>
           <div className="step-pills" aria-label="Progress">
             {STEP_KEYS.map((key, i) => (
               <div
@@ -222,6 +286,46 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
                   ))}
                 </select>
               </div>
+              <div className="field">
+                <label htmlFor="inflation">
+                  <HintLabel
+                    label={t(lang, 'locale.inflation')}
+                    hint={t(lang, 'locale.inflation.hint')}
+                  />
+                </label>
+                <NumberInput
+                  id="inflation"
+                  step="0.1"
+                  min={-5}
+                  max={50}
+                  value={
+                    assumptions.inflation === undefined
+                      ? Number.NaN
+                      : assumptions.inflation * 100
+                  }
+                  onChange={(pct) => setAssumptionPct('inflation', pct)}
+                />
+              </div>
+              <div className="field">
+                <label htmlFor="realReturn">
+                  <HintLabel
+                    label={t(lang, 'locale.return')}
+                    hint={t(lang, 'locale.return.hint')}
+                  />
+                </label>
+                <NumberInput
+                  id="realReturn"
+                  step="0.1"
+                  min={-20}
+                  max={50}
+                  value={
+                    assumptions.realReturn === undefined
+                      ? Number.NaN
+                      : assumptions.realReturn * 100
+                  }
+                  onChange={(pct) => setAssumptionPct('realReturn', pct)}
+                />
+              </div>
             </div>
             <p className="disclaimer">
               {marketDisclaimer(lang, market.id, market.disclaimer)}
@@ -248,26 +352,27 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
             <div className="grid-2" style={{ marginTop: '1rem' }}>
               <div className={`field ${ageErrors.some((e) => e.startsWith('life.error.current')) ? 'has-error' : ''}`}>
                 <label htmlFor="age">{t(lang, 'life.age')}</label>
-                <input
+                <NumberInput
                   id="age"
-                  type="number"
                   min={MIN_WORKING_AGE}
                   max={MAX_RETIRE_AGE - 1}
                   value={input.currentAge}
                   aria-invalid={ageErrors.some((e) => e.startsWith('life.error.current'))}
-                  onChange={(e) => patch({ currentAge: Number(e.target.value) })}
+                  onChange={(currentAge) => patch({ currentAge })}
                 />
               </div>
               <div className={`field ${ageErrors.some((e) => e.startsWith('life.error.retire')) ? 'has-error' : ''}`}>
                 <label htmlFor="retireAge">{t(lang, 'life.retireAge')}</label>
-                <input
+                <NumberInput
                   id="retireAge"
-                  type="number"
-                  min={Math.max(MIN_WORKING_AGE + 1, input.currentAge + 1)}
+                  min={Math.max(
+                    MIN_WORKING_AGE + 1,
+                    (Number.isFinite(input.currentAge) ? input.currentAge : MIN_WORKING_AGE) + 1,
+                  )}
                   max={MAX_RETIRE_AGE}
                   value={input.retireAge}
                   aria-invalid={ageErrors.some((e) => e.startsWith('life.error.retire'))}
-                  onChange={(e) => patch({ retireAge: Number(e.target.value) })}
+                  onChange={(retireAge) => patch({ retireAge })}
                 />
               </div>
             </div>
@@ -290,46 +395,45 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
             <div className="grid-2">
               <div className="field">
                 <label htmlFor="salary">{t(lang, 'money.salary')}</label>
-                <input
+                <NumberInput
                   id="salary"
-                  type="number"
                   min={0}
                   value={input.annualSalary}
-                  onChange={(e) => patch({ annualSalary: Number(e.target.value) })}
+                  onChange={(annualSalary) => patch({ annualSalary })}
                 />
               </div>
               <div className="field">
                 <label htmlFor="spend">{t(lang, 'money.spend')}</label>
-                <input
+                <NumberInput
                   id="spend"
-                  type="number"
                   min={0}
                   value={input.monthlySpend}
-                  onChange={(e) => patch({ monthlySpend: Number(e.target.value) })}
+                  onChange={(monthlySpend) => patch({ monthlySpend })}
                 />
               </div>
               <div className="field">
                 <label htmlFor="savings">{t(lang, 'money.savings')}</label>
-                <input
+                <NumberInput
                   id="savings"
-                  type="number"
                   min={0}
                   value={input.currentSavings}
-                  onChange={(e) => patch({ currentSavings: Number(e.target.value) })}
+                  onChange={(currentSavings) => patch({ currentSavings })}
                 />
               </div>
               <div className="field">
                 <label htmlFor="statutory">
-                  {t(lang, 'money.statutory', {
-                    label: market.statutory?.label ?? t(lang, 'money.retirementAccount'),
-                  })}
+                  <HintLabel
+                    label={t(lang, 'money.statutory', {
+                      label: statutoryLabel(lang, market.id, market.statutory?.label),
+                    })}
+                    hint={statutoryHint(lang, market.id)}
+                  />
                 </label>
-                <input
+                <NumberInput
                   id="statutory"
-                  type="number"
                   min={0}
                   value={input.statutoryBalance}
-                  onChange={(e) => patch({ statutoryBalance: Number(e.target.value) })}
+                  onChange={(statutoryBalance) => patch({ statutoryBalance })}
                 />
               </div>
               <div className="field">
@@ -339,12 +443,11 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
                     hint={t(lang, 'money.monthlySave.hint')}
                   />
                 </label>
-                <input
+                <NumberInput
                   id="monthlySave"
-                  type="number"
                   min={0}
                   value={input.monthlySavings}
-                  onChange={(e) => patch({ monthlySavings: Number(e.target.value) })}
+                  onChange={(monthlySavings) => patch({ monthlySavings })}
                 />
               </div>
               <div className="field">
@@ -354,12 +457,11 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
                     hint={t(lang, 'money.oneOff.hint')}
                   />
                 </label>
-                <input
+                <NumberInput
                   id="oneOff"
-                  type="number"
                   min={0}
                   value={input.oneOffGoals}
-                  onChange={(e) => patch({ oneOffGoals: Number(e.target.value) })}
+                  onChange={(oneOffGoals) => patch({ oneOffGoals })}
                 />
               </div>
             </div>
@@ -420,6 +522,9 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
             <div className="share-actions">
               <button type="button" className="btn primary" onClick={onShareX}>
                 {t(lang, 'results.shareX')}
+              </button>
+              <button type="button" className="btn ghost" onClick={onCopySiteLink}>
+                {t(lang, 'results.shareSite')}
               </button>
               <button type="button" className="btn ghost" onClick={onCopyForAgent}>
                 {t(lang, 'results.shareAgent')}
@@ -523,39 +628,49 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
               <h2>{t(lang, 'results.tips')}</h2>
               <p className="lede">{t(lang, 'results.tips.lede')}</p>
               <ul className="tips-list">
-                <li>
-                  {Math.abs(advice.monthlySaveDelta) < 1
-                    ? t(lang, 'results.tips.saveOk', { age: input.retireAge })
-                    : advice.monthlySaveDelta > 0
-                      ? t(lang, 'results.tips.saveMore', {
-                          age: input.retireAge,
-                          amount: formatMoney(advice.monthlySaveDelta, market.currencySymbol),
-                        })
-                      : t(lang, 'results.tips.saveLess', {
-                          age: input.retireAge,
-                          amount: formatMoney(Math.abs(advice.monthlySaveDelta), market.currencySymbol),
-                        })}
-                </li>
-                {Math.abs(advice.monthlyEarnDelta) >= 1 && (
-                  <li>
-                    {advice.monthlyEarnDelta > 0
-                      ? t(lang, 'results.tips.earnMore', {
-                          amount: formatMoney(advice.monthlyEarnDelta, market.currencySymbol),
-                        })
-                      : t(lang, 'results.tips.earnLess', {
-                          amount: formatMoney(Math.abs(advice.monthlyEarnDelta), market.currencySymbol),
-                        })}
-                  </li>
+                {advice.alreadyFundedNow ? (
+                  <>
+                    <li>
+                      {t(lang, 'results.tips.alreadyFunded', {
+                        age: input.currentAge,
+                        target: input.retireAge,
+                      })}
+                    </li>
+                    <li>{t(lang, 'results.tips.alreadyFunded.plan', { target: input.retireAge })}</li>
+                  </>
+                ) : (
+                  <>
+                    <li>
+                      {Math.abs(advice.monthlySaveDelta) < 1
+                        ? t(lang, 'results.tips.saveOk', { age: input.retireAge })
+                        : advice.monthlySaveDelta > 0
+                          ? t(lang, 'results.tips.saveMore', {
+                              age: input.retireAge,
+                              amount: formatMoney(advice.monthlySaveDelta, market.currencySymbol),
+                            })
+                          : t(lang, 'results.tips.saveLess', {
+                              age: input.retireAge,
+                              amount: formatMoney(
+                                Math.abs(advice.monthlySaveDelta),
+                                market.currencySymbol,
+                              ),
+                            })}
+                    </li>
+                    <li>
+                      {advice.breakEvenRetireAge == null
+                        ? t(lang, 'results.tips.ageNever')
+                        : advice.breakEvenRetireAge > input.retireAge
+                          ? t(lang, 'results.tips.ageLater', {
+                              age: advice.breakEvenRetireAge,
+                            })
+                          : advice.breakEvenRetireAge < input.retireAge
+                            ? t(lang, 'results.tips.ageEarlier', {
+                                age: advice.breakEvenRetireAge,
+                              })
+                            : t(lang, 'results.tips.saveOk', { age: input.retireAge })}
+                    </li>
+                  </>
                 )}
-                <li>
-                  {advice.breakEvenRetireAge == null
-                    ? t(lang, 'results.tips.ageNever')
-                    : advice.breakEvenRetireAge > input.retireAge
-                      ? t(lang, 'results.tips.ageLater', { age: advice.breakEvenRetireAge })
-                      : advice.breakEvenRetireAge < input.retireAge
-                        ? t(lang, 'results.tips.ageEarlier', { age: advice.breakEvenRetireAge })
-                        : t(lang, 'results.tips.saveOk', { age: input.retireAge })}
-                </li>
               </ul>
             </div>
 
@@ -587,37 +702,6 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
               </div>
             </div>
 
-            <div className="assumptions">
-              <h2>{t(lang, 'results.assumptions')}</h2>
-              <p className="lede">{t(lang, 'results.assumptionsLede')}</p>
-              <div className="grid-2">
-                <div className="field">
-                  <label htmlFor="infl">{t(lang, 'results.inflation')}</label>
-                  <input
-                    id="infl"
-                    type="number"
-                    step="0.005"
-                    value={assumptions.inflation ?? projection.inflation}
-                    onChange={(e) =>
-                      setAssumptions((a) => ({ ...a, inflation: Number(e.target.value) }))
-                    }
-                  />
-                </div>
-                <div className="field">
-                  <label htmlFor="ret">{t(lang, 'results.return')}</label>
-                  <input
-                    id="ret"
-                    type="number"
-                    step="0.005"
-                    value={assumptions.realReturn ?? projection.realReturn}
-                    onChange={(e) =>
-                      setAssumptions((a) => ({ ...a, realReturn: Number(e.target.value) }))
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-
             <p className="disclaimer">
               {marketDisclaimer(lang, market.id, market.disclaimer)}{' '}
               {t(lang, 'results.disclaimerExtra')}
@@ -629,21 +713,25 @@ export function Wizard({ initialLang, onLangChange, onBackHome }: WizardProps = 
           </>
         )}
 
-        {step < 5 && (
-          <div className="actions">
-            <button type="button" className="btn ghost" onClick={back} disabled={step === 0}>
-              {t(lang, 'nav.back')}
-            </button>
+        <div className="actions">
+          <button type="button" className="btn ghost" onClick={back} disabled={step === 0}>
+            {t(lang, 'nav.back')}
+          </button>
+          {step < 5 && (
             <button
               type="button"
               className="btn primary"
               onClick={next}
-              disabled={step === 1 && !agesOk}
+              disabled={
+                (step === 0 && !assumptionsOk)
+                || (step === 1 && !agesOk)
+                || (step === 2 && !moneyOk)
+              }
             >
               {t(lang, 'nav.continue')}
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </section>
 
       {toast && <div className="toast">{toast}</div>}

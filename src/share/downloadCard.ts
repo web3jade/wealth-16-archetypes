@@ -2,17 +2,17 @@ import { t, type Lang } from '../i18n/messages'
 import { loadPersonalityArt } from '../personality/art'
 import type { PersonalityResult } from '../personality/classify'
 
-export async function downloadSocialCardPng(
+export async function renderSocialCardBlob(
   personality: PersonalityResult,
   lang: Lang,
-): Promise<void> {
+): Promise<Blob | null> {
   const width = 1080
   const height = 1350
   const canvas = document.createElement('canvas')
   canvas.width = width
   canvas.height = height
   const ctx = canvas.getContext('2d')
-  if (!ctx) return
+  if (!ctx) return null
 
   const grad = ctx.createLinearGradient(0, 0, width, height)
   grad.addColorStop(0, '#ffffff')
@@ -69,14 +69,25 @@ export async function downloadSocialCardPng(
   ctx.font = '500 22px DM Sans, sans-serif'
   ctx.fillText(t(lang, 'results.disclaimerExtra'), width / 2, height - 48)
 
-  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/png'))
-  if (!blob) return
+  return new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/png'))
+}
+
+export function triggerBlobDownload(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = `wealth16-${personality.code}.png`
+  a.download = filename
   a.click()
   URL.revokeObjectURL(url)
+}
+
+export async function downloadSocialCardPng(
+  personality: PersonalityResult,
+  lang: Lang,
+): Promise<void> {
+  const blob = await renderSocialCardBlob(personality, lang)
+  if (!blob) return
+  triggerBlobDownload(blob, `wealth16-${personality.code}.png`)
 }
 
 function wrapTextCentered(

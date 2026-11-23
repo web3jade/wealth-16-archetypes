@@ -35,7 +35,6 @@ describe('buildPlanAdvice', () => {
     const projection = projectRetirement(input, market)
     const advice = buildPlanAdvice(input, market, projection)
     expect(advice.monthlySaveDelta).toBeGreaterThan(0)
-    expect(advice.monthlyEarnDelta).toBeGreaterThan(0)
     expect(advice.portfolio.slices.reduce((s, x) => s + x.pct, 0)).toBe(100)
     expect(advice.portfolio.expectedRealReturn).toBeGreaterThan(0)
     expect(advice.portfolio.expectedRealReturn).toBeLessThan(0.1)
@@ -54,5 +53,24 @@ describe('buildPlanAdvice', () => {
     const advice = buildPlanAdvice(input, market, projection)
     expect(advice.breakEvenRetireAge).not.toBeNull()
     expect(advice.breakEvenRetireAge!).toBeLessThanOrEqual(65)
+  })
+
+  it('does not push save-less or pre-current-age retire when already funded now', () => {
+    const market = getMarket('hk')!
+    const input = base({
+      currentAge: 45,
+      retireAge: 55,
+      monthlySpend: 10_000,
+      monthlySavings: 20_000,
+      currentSavings: 8_000_000,
+      statutoryBalance: 1_000_000,
+      riskBand: 'balanced',
+      lifestyleGoal: 'same',
+    })
+    const projection = projectRetirement(input, market)
+    const advice = buildPlanAdvice(input, market, projection)
+    expect(advice.alreadyFundedNow).toBe(true)
+    expect(advice.monthlySaveDelta).toBe(0)
+    expect(advice.breakEvenRetireAge).toBe(45)
   })
 })
